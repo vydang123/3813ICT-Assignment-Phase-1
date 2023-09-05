@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-profile',
@@ -8,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 export class ProfileComponent implements OnInit {
   userProfile: any = {}; // Define the type of user object
 
-  constructor() {}
+  constructor(private userService: UserService) {}
 
   ngOnInit(): void {
     this.userProfile.username = sessionStorage.getItem("username");

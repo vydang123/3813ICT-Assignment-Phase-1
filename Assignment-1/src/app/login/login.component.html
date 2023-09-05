@@ -1,19 +1,20 @@
 <div class="login-container">
-  <form class="login-form">
-      <h2>Login</h2>
-      <!-- Email input -->
-      <div class="form-group">
-          <label for="emailInput">Email address</label>
-          <input id="emailInput" class="form-control" type="email" [(ngModel)]="userpwd.email" name="email" required>
-      </div>
-      <!-- Password input -->
-      <div class="form-group">
-          <label for="passwordInput">Password</label>
-          <input id="passwordInput" class="form-control" type="password" [(ngModel)]="userpwd.pwd" name="password" required>
-      </div>
-      <!-- Submit button -->
-      <div class="form-group">
-          <button (click)="loginfunc()" type="submit" class="btn btn-primary">Sign in</button>
-      </div>
-  </form>
-</div>
+    <form (submit)="loginfunc()">
+        <h2>Login</h2>
+        <!-- Email input -->
+        <div class="form-group">
+            <label for="emailInput">Email address</label>
+            <input id="emailInput" class="form-control" type="email" [(ngModel)]="userpwd.email" name="email" required>
+        </div>
+        <!-- Password input -->
+        <div class="form-group">
+            <label for="passwordInput">Password</label>
+            <input id="passwordInput" class="form-control" type="password" [(ngModel)]="userpwd.pwd" name="password" required>
+        </div>
+        <!-- Submit button -->
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Sign in</button>
+        </div>
+    </form>
+  </div>
+  

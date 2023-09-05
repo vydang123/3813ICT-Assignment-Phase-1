@@ -2,7 +2,7 @@
     {
         "username": "uuuu",
         "userid":1,
-        "roles": "admin",
+        "roles": "superadmin",
         "groups": 2,
         "email": "abc@gmail.com",
         "password": "123",

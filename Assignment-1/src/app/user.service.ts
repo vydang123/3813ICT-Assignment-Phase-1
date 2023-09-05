@@ -7,7 +7,7 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'https://localhost:4200'; // Replace with your API endpoint
+  private apiUrl = 'http://localhost:3000'; // Replace with your API endpoint
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })

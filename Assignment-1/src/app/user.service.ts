@@ -25,11 +25,22 @@ export class UserService {
 
   // User registration
   registerUser(userData: any): Observable<any> {
-    return this.http.post(this.apiUrl, userData, this.httpOptions)
-      .pipe(
-        catchError(this.handleError)
-      );
-  }
+    return this.http.post(`${this.apiUrl}/register`, userData, this.httpOptions)
+        .pipe(
+            catchError(this.handleError)
+        );
+}
+
+updateUser(userData: any): Observable<any> {
+  return this.http.put(`${this.apiUrl}/updateUser`, userData, this.httpOptions)
+      .pipe(catchError(this.handleError));
+}
+
+// Delete user
+deleteUser(userData: any): Observable<any> {
+  return this.http.delete(`${this.apiUrl}/deleteUser/${userData.userid}`, this.httpOptions)
+      .pipe(catchError(this.handleError));
+}
 
   // Error handling
   private handleError(error: any) {

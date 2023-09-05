@@ -9,6 +9,9 @@ import { ProfileComponent } from './profile/profile.component';
 import { HttpClientModule } from '@angular/common/http';
 import { RegisterComponent } from './register/register.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ChatComponent } from './chat/chat.component';
+import { SuperAdminComponent } from './super-admin/super-admin.component';
+import { GroupAdminComponent } from './group-admin/group-admin.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +19,10 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     LoginComponent,
     ProfileComponent,
     RegisterComponent,
-    DashboardComponent
+    DashboardComponent,
+    ChatComponent,
+    SuperAdminComponent,
+    GroupAdminComponent
   ],
   imports: [
     BrowserModule,

@@ -18,6 +18,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {}
 
   onSubmit() {
+
     this.userService.registerUser(this.newUser).subscribe(
       data => {
         // Handle response from server

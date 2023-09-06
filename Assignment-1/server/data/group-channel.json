@@ -1,1 +1,91 @@
-[{"groupid":1,"groupname":"Red","channels":["345"],"members":[7,7]},{"groupid":2,"groupname":"Blue","channels":["123","345","nb "],"members":[4,8,7,4]},{"groupid":3,"groupname":"White","channels":["126","vh","vh","attic"],"members":[4,4,4,5]},{"groupid":4,"groupname":"Yellow","channels":[],"members":[4,6,5,7,4,6]},{"groupid":5,"groupname":"ascacx","channels":[],"members":[2,4,6,8,7,5]},{"groupid":6,"groupname":"asd","channels":["ergvfdc"],"members":[4,3]},{"groupid":7,"groupname":"nb bug","channels":0},{"groupid":8,"groupname":"bn","channels":0},{"groupid":9,"groupname":"mnb","channels":0}]
+[
+  {
+    "groupid": 1,
+    "groupname": "Red",
+    "channels": [
+      "345"
+    ],
+    "members": [
+      7,
+      7
+    ]
+  },
+  {
+    "groupid": 2,
+    "groupname": "Blue",
+    "channels": [
+      "123",
+      "345",
+      "nb "
+    ],
+    "members": [
+      4,
+      8,
+      7,
+      4
+    ]
+  },
+  {
+    "groupid": 3,
+    "groupname": "White",
+    "channels": [
+      "126",
+      "vh",
+      "vh",
+      "attic"
+    ],
+    "members": [
+      4,
+      4,
+      4,
+      5
+    ]
+  },
+  {
+    "groupid": 4,
+    "groupname": "Yellow",
+    "channels": [],
+    "members": [
+      4,
+      6,
+      5,
+      7,
+      4,
+      6
+    ]
+  },
+  {
+    "groupid": 5,
+    "groupname": "ascacx",
+    "channels": [],
+    "members": [
+      2,
+      4,
+      6,
+      8,
+      7,
+      5
+    ]
+  },
+  {
+    "groupid": 6,
+    "groupname": "asd",
+    "channels": [
+      "ergvfdc"
+    ],
+    "members": [
+      4,
+      3
+    ]
+  },
+  {
+    "groupid": 7,
+    "groupname": "nb bug",
+    "channels": 0
+  },
+  {
+    "groupid": 8,
+    "groupname": "bn",
+    "channels": 0
+  }
+]

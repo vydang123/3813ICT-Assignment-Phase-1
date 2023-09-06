@@ -88,11 +88,20 @@ export class SuperAdminComponent implements OnInit {
   }
 
   deleteUser(user: any) {
-    const index = this.users.indexOf(user);
-    if (index > -1) {
-      this.users.splice(index, 1);
-      // Make an API call if needed to save changes on the backend
-    }
-  }
+    this.userService.deleteUser(user.userid).subscribe(
+        response => {
+            console.log(response.message);
+
+            // Remove the user from the local users array
+            const index = this.users.indexOf(user);
+            if (index > -1) {
+                this.users.splice(index, 1);
+            }
+        },
+        error => {
+            console.error("Error deleting user:", error);
+        }
+    );
+}
 }
 

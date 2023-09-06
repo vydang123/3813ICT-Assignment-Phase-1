@@ -34,3 +34,4 @@ server.listen(3000, "localhost", function() {
 // Use the authRouter for handling authentication routes
 app.post('/login', require('./routes/postLogin'));
 app.post('/register',require('./routes/postRegister'));
+app.delete('/deleteUser/:userId', require('./routes/deleteUser'));

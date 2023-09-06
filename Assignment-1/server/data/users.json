@@ -61,14 +61,5 @@
     "groups": 0,
     "valid": true,
     "userid": 7
-  },
-  {
-    "username": "hgc",
-    "email": "123",
-    "password": "hv",
-    "role": "user",
-    "groups": 0,
-    "valid": true,
-    "userid": 8
   }
 ]

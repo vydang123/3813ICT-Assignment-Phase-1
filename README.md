@@ -2,131 +2,131 @@
 
 # GIT
 ## Layout of a Typical Git Repository:
-•	.git/: This is the directory where Git stores the metadata and object database for your project. This is the most important part of a Git repository and copying this folder elsewhere will clone the repository with its full history.
-•	Working Directory: The primary area where I'll be making changes to your code. This is the "current snapshot" of my project.
-•	Index: Also known as the staging area, this is an intermediate area where changes are collected before being permanently stored in the repository history.
-•	HEAD: This points to the latest commit in the branch that I've checked out.
+* •	.git/: This is the directory where Git stores the metadata and object database for your project. This is the most important part of a Git repository and copying this folder elsewhere will clone the repository with its full history.
+* •	Working Directory: The primary area where I'll be making changes to your code. This is the "current snapshot" of my project.
+* •	Index: Also known as the staging area, this is an intermediate area where changes are collected before being permanently stored in the repository history.
+* •	HEAD: This points to the latest commit in the branch that I've checked out.
 
 ## Approach for Version Control Using Git:
-•	Initialization: Using git clone to copy an existing repository.
-•	Add Changes: Make changes in my working directory.
-•	Stage Changes: Use git add . to stage all the changes in the current directory and its subdirectories for the next commit.
-•	Commit Changes: Use git commit -m "Description of changes" to permanently store staged changes in the repository history.
-•	Push/Pull: Use git push to upload local repository content to a remote repository and git pull to download content from a remote repository and integrate it into the local one.
+* •	Initialization: Using git clone to copy an existing repository.
+* •	Add Changes: Make changes in my working directory.
+* •	Stage Changes: Use git add . to stage all the changes in the current directory and its subdirectories for the next commit.
+* •	Commit Changes: Use git commit -m "Description of changes" to permanently store staged changes in the repository history.
+* •	Push/Pull: Use git push to upload local repository content to a remote repository and git pull to download content from a remote repository and integrate it into the local one.
 
 # Data Structure
 
 ## users.json
 Main Data Structures:
-•	Array of User Objects: Each object in this array represents a user in the system.
+* •	Array of User Objects: Each object in this array represents a user in the system.
 Attributes of a User Object:
-•	username: A string representing the username of the user.
-•	userid: An integer representing the unique ID of the user.
-•	role: A string representing the role of the user. Examples include groupadmin, superadmin, and user.
-•	groupids: An array of integers representing the IDs of the groups the user is associated with. In some user objects, there seems to be a slight inconsistency where the key is named groups instead of groupids (and the value is an integer instead of an array). This might be an error in the dataset.
-•	email: A string representing the user's email address.
-•	password: A string representing the user's password (usually, passwords shouldn't be stored in plain text for security reasons).
-•	valid: A boolean indicating whether the user's account is valid or not.
+* •	username: A string representing the username of the user.
+* •	userid: An integer representing the unique ID of the user.
+* •	role: A string representing the role of the user. Examples include groupadmin, superadmin, and user.
+* •	groupids: An array of integers representing the IDs of the groups the user is associated with. In some user objects, there seems to be a slight inconsistency where the key is named groups instead of groupids (and the value is an integer instead of an array). This might be an error in the dataset.
+* •	email: A string representing the user's email address.
+* •	password: A string representing the user's password (usually, passwords shouldn't be stored in plain text for security reasons).
+* •	valid: A boolean indicating whether the user's account is valid or not.
 
 ## group-channel.json
 Main Data Structures:
-•	Array of Group-Channel Objects: Each object in this array represents a group with its associated channels.
+* •	Array of Group-Channel Objects: Each object in this array represents a group with its associated channels.
 Attributes of a Group-Channel Object:
-•	groupid: An integer representing the unique ID of the group.
-•	groupname: A string representing the name of the group.
-•	channels: An array of strings representing the names of channels associated with the group. There seems to be a slight inconsistency where, for some groups, the channels key has an integer value of 0 instead of an array. This might indicate that the group has no channels, but to maintain consistency, it would be better to use an empty array.
-•	members: An array of integers representing the user IDs of members associated with the group.
+* •	groupid: An integer representing the unique ID of the group.
+* •	groupname: A string representing the name of the group.
+* •	channels: An array of strings representing the names of channels associated with the group. There seems to be a slight inconsistency where, for some groups, the channels key has an integer value of 0 instead of an array. This might indicate that the group has no channels, but to maintain consistency, it would be better to use an empty array.
+* •	members: An array of integers representing the user IDs of members associated with the group.
 
 # REST API
 server.js: 
 
-app.post('/login', require('./routes/postLogin'));
-app.post('/register',require('./routes/postRegister'));
-app.delete('/deleteUser/:userId', require('./routes/deleteUser'));
-app.put('/updateUserRole', require('./routes/updateUserRole'));
-app.get('/users', require('./routes/getUsers'));
-app.get('/groups', require('./routes/getGroups'));
-app.put('/addUserToGroup', require('./routes/addUserToGroup'));
-app.post('/addGroup', require('./routes/addGroup'));
-app.post('/addChannel', require('./routes/addChannel'));
-app.delete('/deleteChannelFromGroup/:channelId/:groupId', require('./routes/deleteChannelFromGroup'));
-app.delete('/deleteGroup/:groupId', require('./routes/deleteGroup'));
-app.delete('/removeUser/:userId/:groupId', require('./routes/removeUser'));
-app.post('/login', require('./routes/postLogin'));
+* app.post('/login', require('./routes/postLogin'));
+* app.post('/register',require('./routes/postRegister'));
+* app.delete('/deleteUser/:userId', require('./routes/deleteUser'));
+* app.put('/updateUserRole', require('./routes/updateUserRole'));
+* app.get('/users', require('./routes/getUsers'));
+* app.get('/groups', require('./routes/getGroups'));
+* app.put('/addUserToGroup', require('./routes/addUserToGroup'));
+* app.post('/addGroup', require('./routes/addGroup'));
+* app.post('/addChannel', require('./routes/addChannel'));
+* app.delete('/deleteChannelFromGroup/:channelId/:groupId', require('./routes/* deleteChannelFromGroup'));
+* app.delete('/deleteGroup/:groupId', require('./routes/deleteGroup'));
+* app.delete('/removeUser/:userId/:groupId', require('./routes/removeUser'));
+* app.post('/login', require('./routes/postLogin'));
 
 
 ## app.post('/login', require('./routes/postLogin'));
 /login - Authenticate a user
-•	HTTP Method: POST
-•	Endpoint: /login
-•	Handler: postLogin.js
+* •	HTTP Method: POST
+* •	Endpoint: /login
+* •	Handler: postLogin.js
 Parameters:
 Request Body:
-•	email: The email of the user attempting to log in.
-•	pwd: The password provided by the user.
+* •	email: The email of the user attempting to log in.
+* •	pwd: The password provided by the user.
 
 Return Values:
-•	On success (i.e., email and password match an existing user):
-    o	valid: true
-    o	user:
-    o	userid: The user's unique identifier.
-    o	username: The name of the user.
-    o	role: The role assigned to the user (e.g., 'groupadmin', 'superadmin', 'user').
-    o	groupids: An array containing the IDs of groups the user belongs to.
-    o	email: The email of the user.
-•	On failure (i.e., the provided email and password don't match any existing user):
-    o	valid: false
+* •	On success (i.e., email and password match an existing user):
+*     o	valid: true
+*     o	user:
+*     o	userid: The user's unique identifier.
+*     o	username: The name of the user.
+*     o	role: The role assigned to the user (e.g., 'groupadmin', 'superadmin', 'user').
+*     o	groupids: An array containing the IDs of groups the user belongs to.
+*     o	email: The email of the user.
+* •	On failure (i.e., the provided email and password don't match any existing user):
+*     o	valid: false
 Purpose:
-•	The purpose of this route is to authenticate users based on the provided email and password.
-•	When a POST request is made to this endpoint, the server will read from the users.json file to check if there's a user with the provided email and password.
-•	If such a user is found, the server sends back a response with valid set to true and includes the user's details. If not, the server sends a response with valid set to false.
+* •	The purpose of this route is to authenticate users based on the provided email and password.
+* •	When a POST request is made to this endpoint, the server will read from the users.json file to check if there's a user with the provided email and password.
+* •	If such a user is found, the server sends back a response with valid set to true and includes the user's details. If not, the server sends a response with valid set to false.
 
 How it works:
-•	The postLogin.js module is imported and used as a handler for the /login route in the server.js file.
-•	Within postLogin.js, the email and password are extracted from the request body using req.body.email and req.body.pwd, respectively.
-•	The module then attempts to read the users.json file.
-•	If an error occurs during the read operation, it throws an error.
-•	If the file is read successfully, the data is parsed into a JSON array.
-•	The array is searched to find a user with a matching email and password using the find() method.
-•	If a matching user is found, a response is sent with valid set to true and the user's details. If no match is found, a response with valid set to false is sent.
+* •	The postLogin.js module is imported and used as a handler for the /login route in the server.js file.
+* •	Within postLogin.js, the email and password are extracted from the request body using req.body.email and req.body.pwd, respectively.
+* •	The module then attempts to read the users.json file.
+* •	If an error occurs during the read operation, it throws an error.
+* •	If the file is read successfully, the data is parsed into a JSON array.
+* •	The array is searched to find a user with a matching email and password using the find() method.
+* •	If a matching user is found, a response is sent with valid set to true and the user's details. If no match is found, a response with valid set to false is sent.
 
 ## app.post('/register',require('./routes/postRegister'));
 /register - Register a new user or list existing users
-•	HTTP Method: POST
-•	Endpoint: /register
-•	Handler: postRegister.js
+* •	HTTP Method: POST
+* •	Endpoint: /register
+* •	Handler: postRegister.js
 Parameters:
-•	Request Body:
-    o	General user data including but not limited to:
-        	email: The email of the user being registered.
-        	username: The username of the user being registered.
-        	action: An optional action parameter that can have a value of "listUser". If this action is provided, the route will list all users.
-    o	Other attributes can be added depending on the user registration fields you have. These might include password, firstName, lastName, etc.
+* •	Request Body:
+*     o	General user data including but not limited to:
+*         	email: The email of the user being registered.
+*         	username: The username of the user being registered.
+*         	action: An optional action parameter that can have a value of "listUser". If this action is provided, the route will list all users.
+*     o	Other attributes can be added depending on the user registration fields you have. These might include password, firstName, lastName, etc.
 
 Return Values:
-•	If the action "listUser" is provided:
-    o	users: An array containing all registered users.
-•	On successful registration:
-    o	valid: true
-•	On failure (e.g., email already exists, error reading users, error writing to file):
-    o	valid: false
-    o	message: A descriptive error message indicating the reason for failure, such as 'Email already in use.' or 'Error writing to file.'
+* •	If the action "listUser" is provided:
+*     o	users: An array containing all registered users.
+* •	On successful registration:
+*     o	valid: true
+* •	On failure (e.g., email already exists, error reading users, error writing to file):
+*     o	valid: false
+*     o	message: A descriptive error message indicating the reason for failure, such as 'Email already in use.' or 'Error writing to file.'
 
 Purpose:
-•	The primary purpose of this route is to register a new user.
-•	However, if the "listUser" action is provided in the request, the route will instead list all registered users.
+* •	The primary purpose of this route is to register a new user.
+* •	However, if the "listUser" action is provided in the request, the route will instead list all registered users.
 
 How it works:
-•	The postRegister.js module is imported and used as a handler for the /register route in the server.js file.
-•	Within postRegister.js, all user data is extracted from the request body using req.body.
-•	The module uses the readusers() function to attempt to read and parse the users.json file, which contains the data of all registered users.
-•	If there's an error reading the users, a 500 server error response is sent back.
-•	If the action provided is "listUser", it sends back a list of all users.
-•	If the action is not "listUser", the module checks if the provided email or username is already in use by another registered user.
-•	If either the email or username is already in use, a 400 error response is sent back.
-•	If the email and username are unique, a new userid is generated for the new user, and the new user data is added to the users array.
-•	The updated users array is then written back to the users.json file.
-•	If there's an error during the write operation, a 500 server error response is sent back. If the write operation is successful, a response indicating a successful registration (valid: true) is sent back.
+* •	The postRegister.js module is imported and used as a handler for the /register route in the server.js file.
+* •	Within postRegister.js, all user data is extracted from the request body using req.body.
+* •	The module uses the readusers() function to attempt to read and parse the users.json file, which contains the data of all registered users.
+* •	If there's an error reading the users, a 500 server error response is sent back.
+* •	If the action provided is "listUser", it sends back a list of all users.
+* •	If the action is not "listUser", the module checks if the provided email or username is already in use by another registered user.
+* •	If either the email or username is already in use, a 400 error response is sent back.
+* •	If the email and username are unique, a new userid is generated for the new user, and the new user data is added to the users array.
+* •	The updated users array is then written back to the users.json file.
+* •	If there's an error during the write operation, a 500 server error response is sent back. If the write operation is successful, a response indicating a successful registration (valid: true) is sent back.
 
 
 ## app.delete('/deleteUser/:userId', require('./routes/deleteUser'));

@@ -1,4 +1,4 @@
-# 3813ICT Assignement Phase 1
+# 3813ICT Assignment Phase 1
 
 # GIT
 ## Layout of a Typical Git Repository:

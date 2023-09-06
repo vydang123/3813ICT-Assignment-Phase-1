@@ -6,6 +6,7 @@
         <button (click)="addGroup()">Create Group</button> <!-- Changed to addGroup() -->
     </div>
 
+    
     <!-- Add user to group -->
     <div class="add-user-form">
         <label>Select User:</label>
@@ -19,7 +20,41 @@
         </select>
 
         <button (click)="addUserToGroup(selectedUser, selectedGroup)">Add User to Group</button> <!-- Added arguments -->
+        <button (click)="removeUserFromGroup(selectedUser, selectedGroup)">Remove User from Group</button>
     </div>
+
+    <!-- Add channel to group -->
+<div class="add-channel-form">
+    <label>Channel Name:</label>
+    <input [(ngModel)]="newChannelName" type="text">
+    
+    <label>Select Group for Channel:</label>
+    <select [(ngModel)]="selectedGroupForChannel">
+        <option *ngFor="let group of groups" [value]="group.groupid">{{ group.groupname }}  - Group: {{ group.groupid }}</option>
+    </select>
+
+    <button (click)="addChannelToGroup()">Add Channel to Group</button>
+</div>
+
+<!-- Delete channel from group -->
+<div class="delete-channel-form">
+    <label>
+        Select Group:
+        <select [(ngModel)]="selectedGroup" name="groupSelect">
+            <option *ngFor="let group of groups" [ngValue]="group">{{group.groupname}}</option>
+        </select>
+    </label>
+    <label>
+        Select Channel to Remove:
+        <select [(ngModel)]="selectedChannel" name="channelSelect">
+            <option *ngFor="let channel of selectedGroup?.channels" [ngValue]="channel">{{channel}}</option>
+        </select>
+    </label>
+    <button (click)="deleteChannelFromGroup(selectedChannel, selectedGroup)">Delete Channel from Group</button>
+</div>
+
+
+
 
     <!-- Display Groups -->
     <h3>Groups</h3>

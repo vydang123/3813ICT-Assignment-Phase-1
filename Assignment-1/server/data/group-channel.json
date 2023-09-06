@@ -2,12 +2,18 @@
   {
     "groupid": 1,
     "groupname": "Red",
-    "channels": 1
+    "channels": [
+      "345"
+    ]
   },
   {
     "groupid": 2,
     "groupname": "Blue",
-    "channels": 2,
+    "channels": [
+      "123",
+      "345",
+      "nb "
+    ],
     "members": [
       4
     ]
@@ -15,7 +21,12 @@
   {
     "groupid": 3,
     "groupname": "White",
-    "channels": 3,
+    "channels": [
+      "126",
+      "vh",
+      "vh",
+      "attic"
+    ],
     "members": [
       4
     ]
@@ -23,7 +34,7 @@
   {
     "groupid": 4,
     "groupname": "Yellow",
-    "channels": 4,
+    "channels": [],
     "members": [
       4,
       6
@@ -32,7 +43,7 @@
   {
     "groupid": 5,
     "groupname": "ascacx",
-    "channels": 0,
+    "channels": [],
     "members": [
       2,
       4,
@@ -42,7 +53,9 @@
   {
     "groupid": 6,
     "groupname": "asd",
-    "channels": 0,
+    "channels": [
+      "ergvfdc"
+    ],
     "members": [
       4,
       3
@@ -51,7 +64,10 @@
   {
     "groupid": 7,
     "groupname": "awe",
-    "channels": 0,
+    "channels": [
+      "ergvfdc",
+      "ergvfdc"
+    ],
     "members": [
       4,
       5

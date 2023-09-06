@@ -61,5 +61,15 @@
     "groupid": 0,
     "valid": true,
     "userid": 7
+  },
+  {
+    "username": "oooo",
+    "email": "212312",
+    "password": "r34",
+    "role": "user",
+    "groups": 0,
+    "valid": true,
+    "userid": 8,
+    "groupid": null
   }
 ]

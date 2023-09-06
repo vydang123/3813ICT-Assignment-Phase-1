@@ -35,3 +35,4 @@ server.listen(3000, "localhost", function() {
 app.post('/login', require('./routes/postLogin'));
 app.post('/register',require('./routes/postRegister'));
 app.delete('/deleteUser/:userId', require('./routes/deleteUser'));
+app.put('/updateUserRole', require('./routes/updateUserRole'));

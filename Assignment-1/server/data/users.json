@@ -2,8 +2,8 @@
   {
     "username": "uuuu",
     "userid": 1,
-    "role": "superadmin",
-    "groups": 2,
+    "role": "groupadmin",
+    "groupid": 2,
     "email": "abc@gmail.com",
     "password": "123",
     "valid": true
@@ -12,7 +12,7 @@
     "username": "eeee",
     "userid": 2,
     "role": "user",
-    "groups": 2,
+    "groupid": 2,
     "email": "user2@example.com",
     "password": "password2",
     "valid": true
@@ -20,8 +20,8 @@
   {
     "username": "uewer3",
     "userid": 3,
-    "role": "groupadmin",
-    "groups": 1,
+    "role": "superadmin",
+    "groupid": 1,
     "email": "user3@example.com",
     "password": "password3",
     "valid": true
@@ -31,7 +31,7 @@
     "email": "2342",
     "password": "32tregfd",
     "role": "user",
-    "groups": 0,
+    "groupid": 0,
     "valid": true,
     "userid": 4
   },
@@ -39,26 +39,26 @@
     "username": "123",
     "email": "ert",
     "password": "123",
-    "role": "user",
-    "groups": 0,
+    "role": "groupadmin",
+    "groupid": 0,
     "valid": true,
     "userid": 5
   },
   {
-    "username": "w",
-    "email": "ee",
-    "password": "qwe",
+    "username": "112",
+    "email": "sd",
+    "password": "345",
     "role": "user",
-    "groups": 0,
+    "groupid": 0,
     "valid": true,
     "userid": 6
   },
   {
-    "username": "reg",
-    "email": "et34",
-    "password": "23",
+    "username": "lksdn",
+    "email": "sdjfb",
+    "password": "1234",
     "role": "user",
-    "groups": 0,
+    "groupid": 0,
     "valid": true,
     "userid": 7
   }

@@ -22,6 +22,11 @@ module.exports = (req, res) => {
         return res.status(400).send({ valid: false, message: 'Email already in use.' });
     }
   
+     // Check if username already exists
+     if (users.some(user => user.username === newUser.username)) {
+      return res.status(400).send({ valid: false, message: 'Username already exists. Choose another.' });
+  }
+
     // Assign new userID
     newUser.userid = users.length + 1;
     

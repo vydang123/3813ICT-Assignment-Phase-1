@@ -42,6 +42,16 @@ export class UserService {
         );
 }
 
+updateUserRole(userId: number, newRole: string): Observable<any> {
+  const data = {
+      userId: userId,
+      newRole: newRole
+  };
+  return this.http.put(`${this.apiUrl}/updateUserRole`, data, this.httpOptions)
+      .pipe(
+          catchError(this.handleError)
+      );
+}
 
 // Error handling
 private handleError(error: any) {

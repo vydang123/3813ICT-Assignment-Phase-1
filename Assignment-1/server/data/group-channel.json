@@ -1,0 +1,20 @@
+[{
+    "groupid": 1,
+    "group-name": "Red",
+    "channels": 1
+}, 
+{
+    "groupid": 2,
+    "group-name": "Blue",
+    "channels": 2
+},
+{
+    "groupid": 3,
+    "group-name": "White",
+    "channels": 3
+},
+{
+    "groupid": 4,
+    "group-name": "Yellow",
+    "channels": 4
+}]

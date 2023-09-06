@@ -46,13 +46,19 @@ export class SuperAdminComponent implements OnInit {
             email: '',
             password: ''
           };
+          alert('User added successfully.');
         } else {
-          alert('Adding failed.');
+          // Check if the backend provided a message and display it
+          alert(data.message || 'Adding failed.');
         }
       },
       error => {
         // Handle error from server
-        alert('An error occurred during the process.');
+        if (error.error && error.error.message) {
+          alert(error.error.message); // Display the error message from the backend
+        } else {
+          alert('An unknown error occurred during the process.');
+        }
       }
     );
   }
@@ -71,21 +77,31 @@ export class SuperAdminComponent implements OnInit {
     );
     
   }
-  // Modify roles
   upgradeToSuperAdmin(user: any) {
-    user.role = 'superadmin';
-    // Make an API call if needed to save changes on the backend
-  }
+    this.updateUserRole(user, 'superadmin');
+}
 
-  upgradeToGroupAdmin(user: any) {
-    user.role = 'groupadmin';
-    // Make an API call if needed to save changes on the backend
-  }
+upgradeToGroupAdmin(user: any) {
+    this.updateUserRole(user, 'groupadmin');
+}
 
-  degradeToUser(user: any) {
-    user.role = 'user';
-    // Make an API call if needed to save changes on the backend
-  }
+degradeToUser(user: any) {
+    this.updateUserRole(user, 'user');
+}
+
+private updateUserRole(user: any, newRole: string) {
+    this.userService.updateUserRole(user.userid, newRole).subscribe(
+        response => {
+            console.log(response.message);
+            // Update the role of the user locally
+            user.role = newRole;
+            console.log(user.role);
+        },
+        error => {
+            console.error("Error updating user role:", error);
+        }
+    );
+}
 
   deleteUser(user: any) {
     this.userService.deleteUser(user.userid).subscribe(

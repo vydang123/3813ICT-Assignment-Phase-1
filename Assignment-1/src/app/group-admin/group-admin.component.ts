@@ -40,7 +40,7 @@ export class GroupAdminComponent implements OnInit {
   }
 
   fetchAllUsers(): void {
-    this.userService.getUsers().subscribe(data => {
+    this.httpClient.get<any>(BACKEND_URL + 'users', httpOptions).subscribe(data => {
       this.users = data;
     });
   }
@@ -81,7 +81,8 @@ export class GroupAdminComponent implements OnInit {
         // Avoid mutating the original user object
         this.users = this.users.map(u => {
           if (u.userid === user.userid) {
-            return { ...u, groupid: group.groupid || group };
+            return { ...u, groupids: [...u.groupids, group.groupid || group] };
+
           }
           return u;
         });
@@ -117,7 +118,7 @@ removeUserFromGroup(user: any, group: any): void {
       groupId: group.groupid || group
   };
 
-  this.httpClient.delete<any>(`${BACKEND_URL}removeUserFromGroup/${payload.userId}/${payload.groupId}`, httpOptions).subscribe(response => {
+  this.httpClient.delete<any>(`${BACKEND_URL}removeUser/${payload.userId}/${payload.groupId}`, httpOptions).subscribe(response => {
       if (response.success) {
           this.users = this.users.map(u => {
               if (u.userid === user.userid) {

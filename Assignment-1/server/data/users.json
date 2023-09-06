@@ -3,7 +3,7 @@
     "username": "uuuu",
     "userid": 1,
     "role": "groupadmin",
-    "groupid": 2,
+    "groupids": [],
     "email": "abc@gmail.com",
     "password": "123",
     "valid": true
@@ -12,7 +12,7 @@
     "username": "eeee",
     "userid": 2,
     "role": "superadmin",
-    "groupid": 2,
+    "groupids": [],
     "email": "user2@example.com",
     "password": "password2",
     "valid": true
@@ -20,56 +20,40 @@
   {
     "username": "uewer3",
     "userid": 3,
-    "role": "superadmin",
-    "groupid": 1,
+    "role": "user",
+    "groupids": [],
     "email": "user3@example.com",
     "password": "password3",
     "valid": true
   },
   {
-    "username": "qw3eq",
-    "email": "2342",
-    "password": "32tregfd",
-    "role": "user",
-    "groupid": 0,
+    "username": "qwerw",
+    "email": "jngbvc",
+    "password": "123",
+    "role": "groupadmin",
+    "groups": 0,
     "valid": true,
     "userid": 4
   },
   {
-    "username": "123",
-    "email": "ert",
-    "password": "123",
-    "role": "groupadmin",
-    "groupid": 4,
-    "valid": true,
-    "userid": 5
-  },
-  {
-    "username": "112",
-    "email": "sd",
-    "password": "345",
-    "role": "user",
-    "groupid": 5,
-    "valid": true,
-    "userid": 6
-  },
-  {
-    "username": "lksdn",
-    "email": "sdjfb",
-    "password": "1234",
-    "role": "user",
-    "groupid": 0,
-    "valid": true,
-    "userid": 7
-  },
-  {
-    "username": "oooo",
-    "email": "212312",
-    "password": "r34",
+    "username": "fdbf",
+    "email": "dvvc",
+    "password": "23er",
     "role": "user",
     "groups": 0,
     "valid": true,
-    "userid": 8,
-    "groupid": null
+    "userid": 5,
+    "groupids": [
+      3
+    ]
+  },
+  {
+    "username": "ymj",
+    "email": "gh",
+    "password": "34t",
+    "role": "user",
+    "groups": 0,
+    "valid": true,
+    "userid": 6
   }
 ]

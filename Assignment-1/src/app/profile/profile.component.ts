@@ -13,13 +13,11 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.userProfile.username = sessionStorage.getItem("username");
-    this.userProfile.groups = sessionStorage.getItem("groups");
     this.userProfile.userid = sessionStorage.getItem("userid");
 
   }
   saveChanges() {
     sessionStorage.setItem('username', this.userProfile.username);
-    sessionStorage.setItem('groups', this.userProfile.groups)
     sessionStorage.setItem('userid', this.userProfile.userid)
   }
   

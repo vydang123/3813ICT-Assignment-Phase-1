@@ -28,11 +28,6 @@ module.exports = (req, res) => {
         if (!Array.isArray(groups[groupIndex].members)) {
             groups[groupIndex].members = [];
         }
-
-        if (groups[groupIndex].members.includes(userId)) {
-            return res.status(400).send({ success: false, message: 'User already in the group.' });
-        }
-
         groups[groupIndex].members.push(userId);
 
         // Update users.json
@@ -46,7 +41,12 @@ module.exports = (req, res) => {
             const userIndex = users.findIndex(user => user.userid === userId);
 
             if (userIndex !== -1) {
-                users[userIndex].groupid = groupId;
+                if (!Array.isArray(users[userIndex].groupids)) {
+                    users[userIndex].groupids = [];
+                }
+                if (!users[userIndex].groupids.includes(groupId)) {
+                    users[userIndex].groupids.push(groupId);
+                }
             }
 
             // Write updates to both files

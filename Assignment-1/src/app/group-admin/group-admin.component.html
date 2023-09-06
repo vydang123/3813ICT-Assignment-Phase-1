@@ -74,7 +74,13 @@
 
     <!-- Display Users -->
     <h3>Users</h3>
-    <ul>
-        <li *ngFor="let user of users">{{ user.username }} - Group: {{ user.groupid }}</li>
-    </ul>
+<ul>
+    <li *ngFor="let user of users">
+        {{ user.username }} - Groups: 
+        <span *ngFor="let groupId of user.groupids; let last = last">
+            {{ groupId }}<ng-container *ngIf="!last">, </ng-container>
+        </span>
+    </li>
+</ul>
+
 </div>

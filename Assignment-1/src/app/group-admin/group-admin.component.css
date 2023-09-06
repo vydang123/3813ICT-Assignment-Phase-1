@@ -1,57 +1,55 @@
 .container {
-    font-family: Arial, sans-serif;
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 1rem;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    font-family: 'Arial', sans-serif;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
     border-radius: 5px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
     background-color: #fff;
 }
 
 .group-form,
+.delete-group-form,
 .add-user-form,
 .add-channel-form,
 .delete-channel-form {
-    padding: 1rem;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #e1e1e1;
     border-radius: 5px;
-    margin-bottom: 1.5rem;
-    border: 1px solid #e4e4e4;
-    background-color: #f9f9f9;
 }
 
 h3 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    border-bottom: 2px solid #333;
-    padding-bottom: 0.5rem;
+    margin-top: 0;
+    border-bottom: 1px solid #e1e1e1;
+    padding-bottom: 10px;
+    font-size: 20px;
 }
 
 label {
     display: block;
+    margin-bottom: 8px;
     font-weight: bold;
-    margin-top: 1rem;
-    margin-right: 1rem;
 }
 
-input[type="text"],
-select {
+input[type="text"], select {
     width: 100%;
-    padding: 0.5rem;
-    margin-top: 0.5rem;
-    border-radius: 5px;
+    padding: 8px 12px;
+    margin-bottom: 10px;
     border: 1px solid #ccc;
-    box-sizing: border-box;
+    border-radius: 4px;
+    font-size: 16px;
 }
 
 button {
+    padding: 10px 15px;
     background-color: #007BFF;
     color: #fff;
     border: none;
     border-radius: 5px;
-    padding: 0.5rem 1rem;
     cursor: pointer;
-    margin-top: 1rem;
-    transition: background-color 0.3s ease;
+    font-size: 16px;
+    transition: background-color 0.3s;
 }
 
 button:hover {
@@ -59,12 +57,13 @@ button:hover {
 }
 
 ul {
-    list-style: none;
+    list-style-type: none;
+    padding-left: 0;
 }
 
 li {
-    padding: 0.5rem 0;
-    border-bottom: 1px solid #e4e4e4;
+    padding: 5px 0;
+    border-bottom: 1px solid #e1e1e1;
 }
 
 li:last-child {

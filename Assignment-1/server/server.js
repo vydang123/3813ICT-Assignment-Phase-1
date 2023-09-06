@@ -36,3 +36,7 @@ app.post('/login', require('./routes/postLogin'));
 app.post('/register',require('./routes/postRegister'));
 app.delete('/deleteUser/:userId', require('./routes/deleteUser'));
 app.put('/updateUserRole', require('./routes/updateUserRole'));
+app.get('/users', require('./routes/getUsers'));
+app.get('/groups', require('./routes/getGroups'));
+app.put('/addUserToGroup', require('./routes/addUserToGroup'));
+app.post('/addGroup', require('./routes/addGroup'));

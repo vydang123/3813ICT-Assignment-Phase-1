@@ -11,7 +11,7 @@
   {
     "username": "eeee",
     "userid": 2,
-    "role": "user",
+    "role": "superadmin",
     "groupid": 2,
     "email": "user2@example.com",
     "password": "password2",
@@ -49,7 +49,7 @@
     "email": "sd",
     "password": "345",
     "role": "user",
-    "groupid": 0,
+    "groupid": 5,
     "valid": true,
     "userid": 6
   },

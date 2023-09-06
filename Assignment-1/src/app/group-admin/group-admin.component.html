@@ -1,1 +1,35 @@
-<p>group-admin works!</p>
+<div class="container">
+    <!-- Create new group -->
+    <div class="group-form">
+        <label>Group Name:</label>
+        <input [(ngModel)]="newGroup.groupname" type="text">
+        <button (click)="addGroup()">Create Group</button> <!-- Changed to addGroup() -->
+    </div>
+
+    <!-- Add user to group -->
+    <div class="add-user-form">
+        <label>Select User:</label>
+        <select [(ngModel)]="selectedUser">
+            <option *ngFor="let user of users" [value]="user.userid">{{ user.username }}</option>
+        </select>
+        
+        <label>Select Group:</label>
+        <select [(ngModel)]="selectedGroup">
+            <option *ngFor="let group of groups" [value]="group.groupid">{{ group.groupname }}  - Group: {{ group.groupid }}</option>
+        </select>
+
+        <button (click)="addUserToGroup(selectedUser, selectedGroup)">Add User to Group</button> <!-- Added arguments -->
+    </div>
+
+    <!-- Display Groups -->
+    <h3>Groups</h3>
+    <ul>
+        <li *ngFor="let group of groups">{{ group.groupname }}  - Group: {{ group.groupid }}</li>
+    </ul>
+
+    <!-- Display Users -->
+    <h3>Users</h3>
+    <ul>
+        <li *ngFor="let user of users">{{ user.username }} - Group: {{ user.groupid }}</li>
+    </ul>
+</div>

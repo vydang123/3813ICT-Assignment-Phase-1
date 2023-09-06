@@ -1,0 +1,78 @@
+/* Base styling */
+.container {
+    font-family: 'Arial', sans-serif;
+    max-width: 800px;
+    margin: 2em auto;
+    padding: 20px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.05);
+}
+
+h3 {
+    margin-top: 2em;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 0.5em;
+    color: #333;
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+li {
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+/* Group and User Forms */
+.group-form, .add-user-form {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 1em;
+}
+
+.group-form label, .add-user-form label {
+    flex: 1;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.group-form input, .add-user-form select {
+    flex: 2;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.group-form button, .add-user-form button {
+    margin-top: 10px;
+    padding: 10px 15px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.group-form button:hover, .add-user-form button:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive for smaller screens */
+@media (max-width: 600px) {
+    .group-form, .add-user-form {
+        flex-direction: column;
+    }
+
+    .group-form label, .add-user-form label {
+        width: 100%;
+        text-align: left;
+    }
+
+    .group-form input, .add-user-form select, .group-form button, .add-user-form button {
+        width: 100%;
+        margin-top: 0.5em;
+    }
+}

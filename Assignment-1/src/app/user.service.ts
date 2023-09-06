@@ -53,6 +53,7 @@ updateUserRole(userId: number, newRole: string): Observable<any> {
       );
 }
 
+
 // Error handling
 private handleError(error: any) {
   console.error('An error occurred:', error);

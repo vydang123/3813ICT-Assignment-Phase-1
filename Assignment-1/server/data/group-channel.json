@@ -1,20 +1,60 @@
-[{
+[
+  {
     "groupid": 1,
-    "group-name": "Red",
+    "groupname": "Red",
     "channels": 1
-}, 
-{
+  },
+  {
     "groupid": 2,
-    "group-name": "Blue",
-    "channels": 2
-},
-{
+    "groupname": "Blue",
+    "channels": 2,
+    "members": [
+      4
+    ]
+  },
+  {
     "groupid": 3,
-    "group-name": "White",
-    "channels": 3
-},
-{
+    "groupname": "White",
+    "channels": 3,
+    "members": [
+      4
+    ]
+  },
+  {
     "groupid": 4,
-    "group-name": "Yellow",
-    "channels": 4
-}]
+    "groupname": "Yellow",
+    "channels": 4,
+    "members": [
+      4,
+      6
+    ]
+  },
+  {
+    "groupid": 5,
+    "groupname": "ascacx",
+    "channels": 0,
+    "members": [
+      2,
+      4,
+      6
+    ]
+  },
+  {
+    "groupid": 6,
+    "groupname": "asd",
+    "channels": 0,
+    "members": [
+      4,
+      3
+    ]
+  },
+  {
+    "groupid": 7,
+    "groupname": "awe",
+    "channels": 0,
+    "members": [
+      4,
+      5
+    ]
+  }
+]

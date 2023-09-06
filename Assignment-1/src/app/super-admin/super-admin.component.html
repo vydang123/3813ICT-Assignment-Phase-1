@@ -1,27 +1,49 @@
-<div>
-    <h1>Super Admin Dashboard</h1>
-    
-    <!-- Add New User Form -->
-    <div>
-        <h2>Add New User</h2>
-        <form (submit)="addUser()">
-            <input type="text" [(ngModel)]="newUser.username" placeholder="Username" name = "username" required>
-            <input type="password" [(ngModel)]="newUser.password" placeholder="Password" name = 'password' required>
-            <button type="submit">Add User</button>
-        </form>
-    </div>
+<div class="register-container">
+    <form (submit)="onSubmit()">
+        <div class="inputs-row"> <!-- Added this wrapper div for input fields -->
+            <!-- Username input -->
+            <div class="form-group">
+                <label for="usernameInput">Username</label>
+                <input type="text" id="usernameInput" [(ngModel)]="newUser.username" name="username" required>
+            </div>
+            <!-- Email input -->
+            <div class="form-group">
+                <label for="emailInput">Email address</label>
+                <input type="email" id="emailInput" [(ngModel)]="newUser.email" name="email" required>
+            </div>
+            <!-- Password input -->
+            <div class="form-group">
+                <label for="passwordInput">Password</label>
+                <input type="password" id="passwordInput" [(ngModel)]="newUser.password" name="password" required>
+            </div>
+        </div>
+        <!-- Submit button -->
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Add</button>
+        </div>
 
-    <!-- Users List -->
-    <div>
-        <h2>Users</h2>
-        <ul>
-            <li *ngFor="let user of users">
-                <span>{{ user.username }} ({{ user.roles }})</span>
-                <button (click)="updateUserRole(user, 'user')">Set as User</button>
-                <button (click)="updateUserRole(user, 'groupadmin')">Set as Group Admin</button>
-                <button (click)="updateUserRole(user, 'superadmin')">Set as Super Admin</button>
-                <button (click)="deleteUser(user)">Delete</button>
-            </li>
-        </ul>
-    </div>
+    </form>
 </div>
+
+<h3>User List</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Username</th>
+      <th>Role</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{ user.username }}</td>
+      <td>{{ user.role }}</td>
+      <td>
+        <button *ngIf="user.role !== 'superadmin'" (click)="upgradeToSuperAdmin(user)">Super Admin</button>
+        <button *ngIf="user.role !== 'groupadmin'" (click)="upgradeToGroupAdmin(user)">Group Admin</button>
+        <button *ngIf="user.role !== 'user'" (click)="degradeToUser(user)">User</button>
+        <button (click)="deleteUser(user)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>

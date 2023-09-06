@@ -17,7 +17,7 @@ export class UserService {
 
   // Fetch all users
   getUsers(): Observable<any> {
-    return this.http.get(this.apiUrl)
+    return this.http.get(`${this.apiUrl}/users`)
       .pipe(
         catchError(this.handleError)
       );
@@ -25,26 +25,20 @@ export class UserService {
 
   // User registration
   registerUser(userData: any): Observable<any> {
+    userData.role = 'user'; // Defaulting the role to 'user' on registration
+    userData.groups = 0; // Default value for groups
+    userData.valid = true; // Default value for validity
+    
     return this.http.post(`${this.apiUrl}/register`, userData, this.httpOptions)
         .pipe(
             catchError(this.handleError)
         );
-}
-
-updateUser(userData: any): Observable<any> {
-  return this.http.put(`${this.apiUrl}/updateUser`, userData, this.httpOptions)
-      .pipe(catchError(this.handleError));
-}
-
-// Delete user
-deleteUser(userData: any): Observable<any> {
-  return this.http.delete(`${this.apiUrl}/deleteUser/${userData.userid}`, this.httpOptions)
-      .pipe(catchError(this.handleError));
-}
-
-  // Error handling
-  private handleError(error: any) {
-    console.error('An error occurred:', error);
-    return throwError('Something went wrong; please try again later.');
   }
+
+
+// Error handling
+private handleError(error: any) {
+  console.error('An error occurred:', error);
+  return throwError('Something went wrong; please try again later.');
+}
 }

@@ -154,6 +154,7 @@ deleteChannelFromGroup(channel: string, group: any): void {
           const channelIndex = this.groups[groupIndex].channels.indexOf(channel);
           this.groups[groupIndex].channels.splice(channelIndex, 1);  // Remove channel from local data
           alert('Channel removed from group!');
+          this.fetchAllGroups();
       }
   }, error => {
       console.error('Error removing channel from group:', error);

@@ -40,7 +40,7 @@
     "email": "ert",
     "password": "123",
     "role": "groupadmin",
-    "groupid": 0,
+    "groupid": 4,
     "valid": true,
     "userid": 5
   },

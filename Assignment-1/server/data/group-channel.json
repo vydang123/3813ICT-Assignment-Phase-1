@@ -37,7 +37,8 @@
     "channels": [],
     "members": [
       4,
-      6
+      6,
+      5
     ]
   },
   {
@@ -59,18 +60,6 @@
     "members": [
       4,
       3
-    ]
-  },
-  {
-    "groupid": 7,
-    "groupname": "awe",
-    "channels": [
-      "ergvfdc",
-      "ergvfdc"
-    ],
-    "members": [
-      4,
-      5
     ]
   }
 ]

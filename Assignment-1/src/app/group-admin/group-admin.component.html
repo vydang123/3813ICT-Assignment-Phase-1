@@ -5,6 +5,16 @@
         <input [(ngModel)]="newGroup.groupname" type="text">
         <button (click)="addGroup()">Create Group</button> <!-- Changed to addGroup() -->
     </div>
+    <!-- Delete group -->
+<div class="delete-group-form">
+    <label>
+        Select Group to Delete:
+        <select [(ngModel)]="selectedGroup" name="groupDeleteSelect">
+            <option *ngFor="let group of groups" [ngValue]="group">{{group.groupname}} - Group: {{ group.groupid }}</option>
+        </select>
+    </label>
+    <button (click)="deleteGroup(selectedGroup)">Delete Group</button>
+</div>
 
     
     <!-- Add user to group -->

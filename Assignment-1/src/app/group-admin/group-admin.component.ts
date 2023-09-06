@@ -152,6 +152,21 @@ deleteChannelFromGroup(channel: string, group: any): void {
   });
 }
 
+deleteGroup(group: any): void {
+  if (confirm(`Are you sure you want to delete the group: ${group.groupname}?`)) {
+    this.httpClient.delete<any>(`${BACKEND_URL}deleteGroup/${group.groupid}`, httpOptions).subscribe(response => {
+      if (response.success) {
+        const index = this.groups.findIndex(g => g.groupid === group.groupid);
+        if (index !== -1) {
+          this.groups.splice(index, 1);
+        }
+        alert('Group deleted successfully!');
+      }
+    }, error => {
+      console.error('Error deleting group:', error);
+    });
+  }
+}
 
 
 }

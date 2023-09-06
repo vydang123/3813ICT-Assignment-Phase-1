@@ -42,6 +42,7 @@ app.put('/addUserToGroup', require('./routes/addUserToGroup'));
 app.post('/addGroup', require('./routes/addGroup'));
 app.post('/addChannel', require('./routes/addChannel'));
 app.delete('/deleteChannelFromGroup/:channelId/:groupId', require('./routes/deleteChannelFromGroup'));
+app.delete('/deleteGroup/:groupId', require('./routes/deleteGroup'));
 
 
 

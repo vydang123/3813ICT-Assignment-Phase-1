@@ -31,12 +31,11 @@ export class LoginComponent implements OnInit {
         if (data.valid == true) {
           sessionStorage.setItem('userid', data.user.userid);
           sessionStorage.setItem('username', data.user.username);
-          sessionStorage.setItem('roles', data.user.roles); 
-          sessionStorage.setItem('groups', data.user.groups);
+          sessionStorage.setItem('role', data.user.role); 
+          sessionStorage.setItem('groups', data.user.groupids);
           
           // Storing the entire user object in sessionStorage
           sessionStorage.setItem('user', JSON.stringify(data.user));
-  
           this.router.navigateByUrl('dashboard');
         } else {
           console.log(data);

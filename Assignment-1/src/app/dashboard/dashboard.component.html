@@ -3,11 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Dashboard</title>
 </head>
 <body>
     <div class="container mt-5">
         <h2>Dashboard</h2>
+
+        <!-- Links based on user role -->
+        <div *ngIf="userRole === 'user'">
+            <!-- Render links related to 'user' role -->
+            <a routerLink="/profile">Profile</a>
+        </div>
+
+        <div *ngIf="userRole === 'groupadmin'">
+            <!-- Render links related to 'groupadmin' role -->
+            <a routerLink="/profile">Profile</a> |
+            <a routerLink="/group-admin">Group Admin</a>
+        </div>
+
+        <div *ngIf="userRole === 'superadmin'">
+            <!-- Render links related to 'superadmin' role -->
+            <a routerLink="/profile">Profile</a> |
+            <a routerLink="/group-admin">Group Admin</a> |
+            <a routerLink="/super-admin">Super Admin</a>
+        </div>
+
         <img src="assets/images/image1.jpg" alt="Profile Image">
     </div>
 </body>

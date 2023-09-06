@@ -39,21 +39,12 @@
     "username": "fdbf",
     "email": "dvvc",
     "password": "23er",
-    "role": "user",
+    "role": "groupadmin",
     "groups": 0,
     "valid": true,
     "userid": 5,
     "groupids": [
       3
     ]
-  },
-  {
-    "username": "ymj",
-    "email": "gh",
-    "password": "34t",
-    "role": "user",
-    "groups": 0,
-    "valid": true,
-    "userid": 6
   }
 ]

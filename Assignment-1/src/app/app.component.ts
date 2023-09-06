@@ -26,7 +26,7 @@ export class AppComponent {
 
     if (matchingUser){
       this.errorMessage = '';
-      this.router.navigate(['/account']);
+      this.router.navigate(['/dashboard']);
     } else {
       this.errorMessage = 'Invalid email or password.'
     }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../user.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 const BACKEND_URL = 'http://localhost:3000/';
 const httpOptions = {
@@ -32,11 +33,17 @@ export class GroupAdminComponent implements OnInit {
 
   
 
-  constructor(private userService: UserService, private httpClient: HttpClient) { }
+  constructor(private userService: UserService, private httpClient: HttpClient, private router: Router) { }
 
   ngOnInit(): void {
     this.fetchAllUsers();
     this.fetchAllGroups();
+    const userRole = sessionStorage.getItem('role');
+
+        if (userRole !== 'groupadmin' && userRole !== 'superadmin') {
+            alert('You don\'t have permission to access this page.');
+            this.router.navigateByUrl('dashboard');
+        }
   }
 
   fetchAllUsers(): void {

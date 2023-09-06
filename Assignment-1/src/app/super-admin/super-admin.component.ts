@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../user.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormsModule } from '@angular/forms'; // Make sure to import this in your module for two-way data binding
+import { Router } from '@angular/router';
+
+
 const BACKEND_URL = 'http://localhost:3000/'; // Replace with your backend URL
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -21,10 +24,16 @@ export class SuperAdminComponent implements OnInit {
   
   users: any[] = []; // Initialize the users list with data from users.json
 
-  constructor(private userService: UserService, private httpClient: HttpClient) { }
+  constructor(private userService: UserService, private httpClient: HttpClient, private router: Router) { }
 
   ngOnInit() {
     this.fetchUserGroups();
+    const userRole = sessionStorage.getItem('role');
+
+        if (userRole !== 'superadmin') {
+            alert('You don\'t have permission to access this page.');
+            this.router.navigateByUrl('dashboard');
+        }
   }
   
 

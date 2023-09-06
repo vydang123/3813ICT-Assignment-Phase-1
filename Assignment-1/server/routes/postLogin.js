@@ -13,8 +13,8 @@ module.exports = function(req, res) {
                 user: {
                     userid: user.userid,
                     username: user.username,
-                    roles: user.roles,
-                    groups: user.groups,
+                    role: user.role,
+                    groupids: user.groupids,
                     email: user.email
                 }
             });

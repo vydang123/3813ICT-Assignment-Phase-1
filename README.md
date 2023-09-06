@@ -1,5 +1,8 @@
 # 3813ICT Assignment Phase 1
 
+* Link to my github: https://github.com/vydang123/3813ICT-Assignment-Phase-1
+* clone my repository: https://github.com/vydang123/3813ICT-Assignment-Phase-1.git
+
 # GIT
 ## Layout of a Typical Git Repository:
 * 	.git/: This is the directory where Git stores the metadata and object database for your project. This is the most important part of a Git repository and copying this folder elsewhere will clone the repository with its full history.

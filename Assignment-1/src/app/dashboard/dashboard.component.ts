@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,7 +10,14 @@ import { UserService } from '../user.service';
 export class DashboardComponent implements OnInit {
   userRole: string = ''; // Initialize with empty string
 
+  constructor(private router: Router) {}
+
   ngOnInit() {
+
+    if (!sessionStorage.getItem('isLoggedin')) {
+      this.router.navigate(['/login']);
+    }
+
       const role = sessionStorage.getItem('role');
       if (role) {
           this.userRole = role;

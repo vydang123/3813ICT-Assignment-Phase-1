@@ -1,20 +1,23 @@
-const fs = require('fs');
-
-module.exports = (req, res) => {
-    // Logic to add the new group to your database or JSON file
-
-    // Sample logic: 
-    fs.readFile('./data/group-channel.json', 'utf8', (err, data) => {
-        if (err) {
-            return res.status(500).send({ message: "Error reading the file." });
+module.exports = (client) => {
+    return async (req, res) => {
+      // Logic to add the new group to your database or JSON file
+  
+      try {
+        const db = client.db('assignment'); // Replace with your actual database name
+  
+        const groupCollection = db.collection('group-channel'); // Replace 'groups' with your actual collection name
+  
+        const insertedGroup = await groupCollection.insertOne(req.body);
+  
+        if (!insertedGroup.insertedId) {
+          return res.status(500).send({ success: false, message: 'Error creating group.' });
         }
-        let groups = JSON.parse(data);
-        groups.push(req.body);
-        fs.writeFile('./data/group-channel.json', JSON.stringify(groups), err => {
-            if (err) {
-                return res.status(500).send({ message: "Error writing to the file." });
-            }
-            res.send({ success: true, message: 'Group added successfully.' });
-        });
-    });
-};
+  
+        return res.send({ success: true, message: 'Group added successfully.' });
+      } catch (err) {
+        console.error('Error in addGroup:', err);
+        return res.status(500).send({ success: false, message: 'Server error.' });
+      }
+    };
+  };
+  

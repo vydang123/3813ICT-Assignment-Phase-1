@@ -1,25 +1,23 @@
-var fs = require('fs');
-
-module.exports = (req, res) => {
-    const userId = req.params.userId;
-    
-    // Read from users.json
-    fs.readFile('./data/users.json', 'utf8', (err, data) => {
-        if (err) {
-            return res.status(500).send({ message: "Error reading the file." });
+module.exports = (client) => {
+    return async (req, res) => {
+      const userId = req.params.userId;
+  
+      try {
+        const db = client.db('assignment'); // Replace with your actual database name
+  
+        const userCollection = db.collection('users'); // Replace 'users' with your actual collection name
+  
+        const deletedUser = await userCollection.findOneAndDelete({ userid: userId });
+  
+        if (!deletedUser.value) {
+          return res.status(404).send({ success: false, message: 'User not found.' });
         }
-
-        let users = JSON.parse(data);
-        
-        // Filter out the user with the given userId
-        const updatedUsers = users.filter(user => user.userid.toString() !== userId);
-
-        // Write the updated user list back to users.json
-        fs.writeFile('./data/users.json', JSON.stringify(updatedUsers, null, 2), err => {
-            if (err) {
-                return res.status(500).send({ message: "Error writing to the file." });
-            }
-            res.send({ message: "User deleted successfully." });
-        });
-    });
-};
+  
+        return res.send({ success: true, message: 'User deleted successfully.' });
+      } catch (err) {
+        console.error('Error in deleteUser:', err);
+        return res.status(500).send({ success: false, message: 'Server error.' });
+      }
+    };
+  };
+  

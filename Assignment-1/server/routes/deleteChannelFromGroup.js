@@ -1,36 +1,28 @@
-const fs = require('fs');
-
-module.exports = (req, res) => {
-    const channelId = req.params.channelId;
-    const groupId = Number(req.params.groupId);
-
-    const groupFilePath = './data/group-channel.json';
-
-    fs.readFile(groupFilePath, 'utf8', (err, data) => {
-        if (err) {
-            console.error('Error reading the group-channel file', err);
-            return res.status(500).send({ success: false, message: 'Server error.' });
+module.exports = (client) => {
+    return async (req, res) => {
+      const channelId = req.params.channelId;
+      const groupId = Number(req.params.groupId);
+  
+      try {
+        const db = client.db('assignment'); // Replace with your actual database name
+  
+        const groupCollection = db.collection('group-channel'); // Replace 'group-channel.json' with your actual collection name
+  
+        const group = await groupCollection.findOne({ groupid: groupId });
+  
+        if (!group) {
+          return res.status(400).send({ success: false, message: 'Group not found.' });
         }
-
-        let groups = JSON.parse(data);
-        const groupIndex = groups.findIndex(group => group.groupid === groupId);
-
-        if (groupIndex === -1) {
-            return res.status(400).send({ success: false, message: 'Group not found.' });
-        }
-
-        const channelIndex = groups[groupIndex].channels.indexOf(channelId);
-        if (channelIndex > -1) {
-            groups[groupIndex].channels.splice(channelIndex, 1);  // Remove the channel from the group
-        }
-
-        fs.writeFile(groupFilePath, JSON.stringify(groups, null, 2), 'utf8', err => {
-            if (err) {
-                console.error('Error writing to the group-channel file', err);
-                return res.status(500).send({ success: false, message: 'Server error.' });
-            }
-
-            res.send({ success: true, message: 'Channel removed from group.' });
-        });
-    });
-};
+  
+        const updatedChannels = group.channels.filter(channel => channel !== channelId);
+  
+        await groupCollection.updateOne({ groupid: groupId }, { $set: { channels: updatedChannels } });
+  
+        return res.send({ success: true, message: 'Channel removed from group.' });
+      } catch (err) {
+        console.error('Error in deleteChannelFromGroup:', err);
+        return res.status(500).send({ success: false, message: 'Server error.' });
+      }
+    };
+  };
+  

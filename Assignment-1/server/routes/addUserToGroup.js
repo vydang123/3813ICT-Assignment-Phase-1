@@ -1,70 +1,41 @@
-const fs = require('fs');
-
-module.exports = (req, res) => {
-    const userId = Number(req.body.userId);
-    const groupId = Number(req.body.groupId);
-    console.log(userId, groupId)
-    if (!userId || !groupId) {
+module.exports = (client) => {
+    return async (req, res) => {
+      const userId = Number(req.body.userId);
+      const groupId = Number(req.body.groupId);
+  
+      if (!userId || !groupId) {
         return res.status(400).send({ success: false, message: 'userId and groupId are required.' });
-    }
-
-    const groupFilePath = './data/group-channel.json';
-    const userFilePath = './data/users.json';
-
-    // Update group-channel.json
-    fs.readFile(groupFilePath, 'utf8', (err, data) => {
-        if (err) {
-            console.error('Error reading the group-channel file', err);
-            return res.status(500).send({ success: false, message: 'Server error.' });
+      }
+  
+      try {
+        const db = client.db('assignment'); // Replace with your actual database name
+  
+        const groupCollection = db.collection('group-channel'); // Replace 'groups' with your actual collection name
+        const userCollection = db.collection('users'); // Replace 'users' with your actual collection name
+  
+        const updatedGroup = await groupCollection.findOneAndUpdate(
+          { groupId: groupId },
+          { $push: { members: userId } }
+        );
+  
+        if (!updatedGroup.value) {
+          return res.status(400).send({ success: false, message: 'Group not found.' });
         }
-
-        let groups = JSON.parse(data);
-        const groupIndex = groups.findIndex(group => group.groupid === groupId);
-
-        if (groupIndex === -1) {
-            return res.status(400).send({ success: false, message: 'Group not found.' });
+  
+        const updatedUser = await userCollection.findOneAndUpdate(
+          { userId: userId },
+          { $addToSet: { groupids: groupId } }
+        );
+  
+        if (!updatedUser.value) {
+          return res.status(400).send({ success: false, message: 'User not found.' });
         }
-
-        if (!Array.isArray(groups[groupIndex].members)) {
-            groups[groupIndex].members = [];
-        }
-        groups[groupIndex].members.push(userId);
-
-        // Update users.json
-        fs.readFile(userFilePath, 'utf8', (err, userData) => {
-            if (err) {
-                console.error('Error reading the users file', err);
-                return res.status(500).send({ success: false, message: 'Server error.' });
-            }
-
-            let users = JSON.parse(userData);
-            const userIndex = users.findIndex(user => user.userid === userId);
-
-            if (userIndex !== -1) {
-                if (!Array.isArray(users[userIndex].groupids)) {
-                    users[userIndex].groupids = [];
-                }
-                if (!users[userIndex].groupids.includes(groupId)) {
-                    users[userIndex].groupids.push(groupId);
-                }
-            }
-
-            // Write updates to both files
-            fs.writeFile(groupFilePath, JSON.stringify(groups, null, 2), 'utf8', err => {
-                if (err) {
-                    console.error('Error writing to the group-channel file', err);
-                    return res.status(500).send({ success: false, message: 'Server error.' });
-                }
-
-                fs.writeFile(userFilePath, JSON.stringify(users, null, 2), 'utf8', err => {
-                    if (err) {
-                        console.error('Error writing to the users file', err);
-                        return res.status(500).send({ success: false, message: 'Server error.' });
-                    }
-
-                    res.send({ success: true, message: 'User added to group.' });
-                });
-            });
-        });
-    });
-};
+  
+        return res.send({ success: true, message: 'User added to group.' });
+      } catch (err) {
+        console.error('Error in addUserToGroup:', err);
+        return res.status(500).send({ success: false, message: 'Server error.' });
+      }
+    };
+  };
+  

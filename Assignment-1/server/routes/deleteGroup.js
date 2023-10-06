@@ -1,29 +1,22 @@
-const fs = require('fs');
+module.exports = (client) => {
+  return async (req, res) => {
+    const groupId = Number(req.params.groupId);
 
-module.exports = (req, res) => {
-  const groupId = Number(req.params.groupId);
-  
-  const groupFilePath = './data/group-channel.json';
-  fs.readFile(groupFilePath, 'utf8', (err, data) => {
-    if (err) {
-      return res.status(500).json({ success: false, message: 'Error reading file.' });
-    }
+    try {
+      const db = client.db('assignment'); // Replace with your actual database name
 
-    const groups = JSON.parse(data);
-    const groupIndex = groups.findIndex(group => group.groupid === groupId);
+      const groupCollection = db.collection('group-channel'); // Replace 'group-channel.json' with your actual collection name
 
-    if (groupIndex === -1) {
-      return res.status(404).json({ success: false, message: 'Group not found.' });
-    }
+      const deletedGroup = await groupCollection.findOneAndDelete({ groupid: groupId });
 
-    groups.splice(groupIndex, 1);
-
-    fs.writeFile(groupFilePath, JSON.stringify(groups, null, 2), err => {
-      if (err) {
-        return res.status(500).json({ success: false, message: 'Error writing to file.' });
+      if (!deletedGroup.value) {
+        return res.status(404).send({ success: false, message: 'Group not found.' });
       }
 
-      res.status(200).json({ success: true, message: 'Group deleted successfully.' });
-    });
-  });
+      return res.send({ success: true, message: 'Group deleted successfully.' });
+    } catch (err) {
+      console.error('Error in deleteGroup:', err);
+      return res.status(500).send({ success: false, message: 'Server error.' });
+    }
+  };
 };

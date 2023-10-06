@@ -1,10 +1,9 @@
 const socketIo = require('socket.io');
-const cors = require('cors');
 
 function setupSockets(server) {
     const io = socketIo(server, {
         cors: {
-            origin: "http://localhost:4200",
+            origin: "http://localhost:4200", // Replace with the actual frontend URL
             methods: ["GET", "POST"]
         }
     });
@@ -13,7 +12,7 @@ function setupSockets(server) {
         console.log('A user connected');
 
         socket.on('message', (msg) => {
-            io.emit('message', msg);
+            io.emit('message', msg); // Broadcast the message to all connected clients
         });
 
         socket.on('disconnect', () => {

@@ -27,13 +27,13 @@ export class LoginComponent implements OnInit {
   public loginfunc() {
     this.httpClient.post(BACKEND_URL + '/login', this.userpwd, httpOptions)
       .subscribe((data: any) => {
-        alert(JSON.stringify(this.userpwd));
+        alert("Login Successfully!");
         if (data.valid == true) {
           sessionStorage.setItem('userid', data.user.userid);
           sessionStorage.setItem('username', data.user.username);
           sessionStorage.setItem('role', data.user.role); 
           sessionStorage.setItem('groups', data.user.groupids);
-          
+          sessionStorage.setItem('isLoggedin', 'true'); 
           // Storing the entire user object in sessionStorage
           sessionStorage.setItem('user', JSON.stringify(data.user));
           this.router.navigateByUrl('dashboard');

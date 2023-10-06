@@ -18,6 +18,17 @@ const server = http.createServer(app);
 const { setupSockets } = require('./sockets');
 setupSockets(server);
 
+// Import the MongoDB client
+const MongoClient = require('mongodb').MongoClient;
+const url = 'mongodb+srv://vydang:Canh274013!@cluster0.j1mept6.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp';
+const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
+
+client.connect().then(() => {
+  console.log('Connected to MongoDB Atlas');
+}).catch(err => {
+  console.error('Error connecting to MongoDB Atlas:', err);
+});
+
 
 const users = []; // Example empty array. In a real application, this could be a database call.
 
@@ -44,6 +55,3 @@ app.post('/addChannel', require('./routes/addChannel'));
 app.delete('/deleteChannelFromGroup/:channelId/:groupId', require('./routes/deleteChannelFromGroup'));
 app.delete('/deleteGroup/:groupId', require('./routes/deleteGroup'));
 app.delete('/removeUser/:userId/:groupId', require('./routes/removeUser'));
-
-
-

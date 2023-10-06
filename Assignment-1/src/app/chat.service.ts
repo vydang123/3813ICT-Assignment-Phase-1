@@ -1,28 +1,33 @@
 import { Injectable } from '@angular/core';
-import { io } from 'socket.io-client';
 import { Observable } from 'rxjs';
-
+import { io } from 'socket.io-client';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class ChatService {
-  private socket: any;
+    private socket: any;
 
-  constructor() {
-    this.socket = io('http://localhost:3000');
-   }
+    constructor() {}
 
-   sendMessage(message: string) {
-    this.socket.emit('newMessage', message);
-  }
-  
-  getMessages(): Observable<string> {
-    return new Observable<string>((observer: any) => {
-      this.socket.on('broadcastMessage', (message: string) => {
-        observer.next(message);
-      });
-    });
-  }
-  
+    connectToChatServer() {
+        // Connect to the socket server
+        this.socket = io('http://localhost:3000'); // Replace with your server URL
+
+        // Handle any additional socket events here
+    }
+
+    sendMessage(message: string) {
+        // Send a message to the server
+        this.socket.emit('message', message);
+    }
+
+    onMessage(): Observable<string> {
+        // Listen for incoming messages
+        return new Observable<string>((observer) => {
+            this.socket.on('message', (data: string) => {
+                observer.next(data);
+            });
+        });
+    }
 }

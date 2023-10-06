@@ -25,8 +25,8 @@ export class UserService {
 
   // User registration
   registerUser(userData: any): Observable<any> {
-    userData.role = 'user'; // Defaulting the role to 'user' on registration
-    userData.groups = 0; // Default value for groups
+    userData.role = ''; // Defaulting the role to 'user' on registration
+    userData.groupid = []; // Default value for groups
     userData.valid = true; // Default value for validity
     
     return this.http.post(`${this.apiUrl}/register`, userData, this.httpOptions)

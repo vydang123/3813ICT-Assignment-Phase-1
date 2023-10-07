@@ -1,57 +1,43 @@
 const express = require('express');
 const app = express();
-const http = require('http');
-var cors = require('cors')
-app.use(cors());
+const cors = require('cors');
+const http = require('http').Server(app);
 
+const PORT = 3000;
+const ObjectID = require('mongodb').ObjectID;
+const url = "mongodb://127.0.0.1:27017/";
 const bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
 const path = require('path');
+
+const server = require('./listen.js');
+
+const dbName = 'assignment';
+
+const {MongoClient} = require('mongodb'),
+client = new MongoClient('mongodb://127.0.0.1:27017/');
+
+const db = client.db(dbName);
+// Middleware
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '/../dist/week4tut')));
 
-console.log(__dirname);
-// Setup http server with express app
-const server = http.createServer(app);
-
-// Use the setupSockets function from sockets.js
-const { setupSockets } = require('./sockets');
-setupSockets(server);
-
-// Import the MongoDB client
-const MongoClient = require('mongodb').MongoClient;
-const url = 'mongodb+srv://vydang:Canh274013!@cluster0.j1mept6.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp';
-const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
-
-client.connect().then(() => {
-  console.log('Connected to MongoDB Atlas');
-}).catch(err => {
-  console.error('Error connecting to MongoDB Atlas:', err);
-});
+  // Define your REST API routes
+  require('./routes/postLogin.js')(db, app, client);
+  require('./routes/addChannel.js')(db, app, client);
+  require('./routes/addGroup.js')(db, app, client);
+  require('./routes/addUserToGroup.js')(db, app, client);
+  require('./routes/createGroup.js')(db, app, client);
+  require('./routes/deleteChannelFromGroup.js')(db, app, client);
+  require('./routes/deleteGroup.js')(db, app, client);
+  require('./routes/deleteUser.js')(db, app, client);
+  require('./routes/getGroups.js')(db, app, client);
+  require('./routes/getUsers.js')(db, app, client);
+  require('./routes/postRegister.js')(db, app, client);
+  require('./routes/removeUser.js')(db, app, client);
+  require('./routes/updateUserRole.js')(db, app, client);
+  require('./listen.js')(http,PORT);
 
 
-const users = []; // Example empty array. In a real application, this could be a database call.
-
-
-
-
-server.listen(3000, "localhost", function() {
-    var d = new Date();
-    var n = d.getHours();
-    var m = d.getMinutes();
-
-    console.log(`Server has been started at: ${n}:${m}`);
-});
-// Use the authRouter for handling authentication routes
-app.post('/login', require('./routes/postLogin'));
-app.post('/register',require('./routes/postRegister'));
-app.delete('/deleteUser/:userId', require('./routes/deleteUser'));
-app.put('/updateUserRole', require('./routes/updateUserRole'));
-app.get('/users', require('./routes/getUsers'));
-app.get('/groups', require('./routes/getGroups'));
-app.put('/addUserToGroup', require('./routes/addUserToGroup'));
-app.post('/addGroup', require('./routes/addGroup'));
-app.post('/addChannel', require('./routes/addChannel'));
-app.delete('/deleteChannelFromGroup/:channelId/:groupId', require('./routes/deleteChannelFromGroup'));
-app.delete('/deleteGroup/:groupId', require('./routes/deleteGroup'));
-app.delete('/removeUser/:userId/:groupId', require('./routes/removeUser'));
+  

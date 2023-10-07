@@ -27,14 +27,15 @@ export class SuperAdminComponent implements OnInit {
   constructor(private userService: UserService, private httpClient: HttpClient, private router: Router) { }
 
   ngOnInit() {
-    this.fetchUserGroups();
-    const userRole = sessionStorage.getItem('role');
-
-        if (userRole !== 'superadmin') {
-            alert('You don\'t have permission to access this page.');
-            this.router.navigateByUrl('dashboard');
-        }
+    // const userRole = sessionStorage.getItem('role');
+    // console.log('User Role:', userRole);
+  
+    // if (userRole !== 'superadmin') {
+    //   alert('You don\'t have permission to access this page.');
+    //   this.router.navigateByUrl('dashboard');
+    // }
   }
+  
   
 
   onSubmit() {
@@ -129,4 +130,3 @@ private updateUserRole(user: any, newRole: string) {
     );
 }
 }
-

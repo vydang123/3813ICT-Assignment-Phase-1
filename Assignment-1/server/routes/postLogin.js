@@ -1,33 +1,31 @@
-module.exports = (client) => {
-    return async function (req, res) {
-      var u = req.body.email;
-      var p = req.body.pwd;
-  
-      try {
-        const db = client.db('assignment'); 
-  
-        const userCollection = db.collection('users'); 
-  
-        const user = await userCollection.findOne({ email: u, password: p });
-  
-        if (user) {
-          res.send({
-            valid: true,
-            user: {
-              userid: user.userid,
-              username: user.username,
-              role: user.role,
-              groupids: user.groupids,
-              email: user.email,
-            },
-          });
-        } else {
-          res.send({ valid: false });
+module.exports = function(db, app, client ) {
+  app.post('/login', async function(req, res) {
+      await client.connect();
+      if (!req.body) {
+          return res.sendStatus(400);
         }
-      } catch (err) {
-        console.error('Error in postLogin:', err);
-        res.status(500).send({ valid: false });
-      }
-    };
-  };
-  
+      const u = req.body.email;
+      const p = req.body.pwd;
+      console.log(u,p);
+      let user = await db.collection('users').findOne({ email: u, password: p })
+      console.log(user);
+          if (user) {
+              res.send({
+                  valid: true,
+                  user: {
+                      userid: user.userid,
+                      username: user.username,
+                      roles: user.roles,
+                      groups: user.groups,
+                      email: user.email
+                  }
+              });
+          } else {
+              res.send({ valid: false });
+          }
+
+      client.close();
+
+      
+  });
+};

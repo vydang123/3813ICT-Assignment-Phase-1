@@ -1,7 +1,7 @@
 const socketIo = require('socket.io');
 
-function setupSockets(server) {
-    const io = socketIo(server, {
+function setupSockets(httpServer) {
+    const io = socketIo(httpServer, {
         cors: {
             origin: "http://localhost:4200", // Replace with the actual frontend URL
             methods: ["GET", "POST"]

@@ -40,20 +40,20 @@ export class GroupAdminComponent implements OnInit {
     this.fetchAllGroups();
     const userRole = sessionStorage.getItem('role');
 
-        if (userRole !== 'groupadmin' && userRole !== 'superadmin') {
-            alert('You don\'t have permission to access this page.');
-            this.router.navigateByUrl('dashboard');
-        }
+        // if (userRole !== 'groupadmin' && userRole !== 'superadmin') {
+        //     alert('You don\'t have permission to access this page.');
+        //     this.router.navigateByUrl('dashboard');
+        // }
   }
 
   fetchAllUsers(): void {
-    this.httpClient.get<any>(BACKEND_URL + 'users', httpOptions).subscribe(data => {
+    this.httpClient.get<any>(BACKEND_URL + 'getUsers', httpOptions).subscribe(data => {
       this.users = data;
     });
   }
 
   fetchAllGroups(): void {
-    this.httpClient.get<any>(BACKEND_URL + 'groups', httpOptions).subscribe(data => {
+    this.httpClient.get<any>(BACKEND_URL + 'getGroups', httpOptions).subscribe(data => {
       this.groups = data;
     });
   }

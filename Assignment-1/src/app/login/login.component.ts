@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit {
   public loginfunc() {
     this.httpClient.post(BACKEND_URL + '/login', this.userpwd, httpOptions)
       .subscribe((data: any) => {
+        console.log('Received response:', data);
         alert("Login Successfully!");
         if (data.valid == true) {
           sessionStorage.setItem('userid', data.user.userid);

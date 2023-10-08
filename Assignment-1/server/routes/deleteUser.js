@@ -1,29 +1,29 @@
-module.exports = function (db, app, client) {
-  app.delete('/deleteUser/:userId', async (req, res) => {
-    await client.connect();
+module.exports = async (db, app, client) => {
+    app.delete('/deleteUser/:email', async (req, res) => {
+        if (!req.params.email) {
+            return res.status(400).send({ message: "Email is required." });
+        }
 
-    try {
-      const userId = req.params.userId;
+        const email = req.params.email;
 
-      // Assuming you have a 'users' collection in your MongoDB
-      const userCollection = db.collection('users');
+        try {
+            // Connect to MongoDB
+            await client.connect();
 
-      // Convert userId to ObjectID (assuming your userId is an ObjectId)
-      const userObjectId = new ObjectID(userId);
+            // Find and delete the user by email
+            const result = await db.collection('users').deleteOne({ email });
 
-      // Delete the user by ObjectId
-      const deleteResult = await userCollection.deleteOne({ _id: userObjectId });
-
-      if (deleteResult.deletedCount === 1) {
-        return res.send({ message: 'User deleted successfully.' });
-      } else {
-        return res.status(404).send({ message: 'User not found.' });
-      }
-    } catch (err) {
-      console.error('Error in deleteUser:', err);
-      return res.status(500).send({ message: 'Error deleting user.' });
-    } finally {
-      client.close();
-    }
-  });
+            if (result.deletedCount === 1) {
+                return res.send({ message: "User deleted successfully." });
+            } else {
+                return res.status(404).send({ message: "User not found." });
+            }
+        } catch (error) {
+            console.error("Error deleting user:", error);
+            return res.status(500).send({ message: "Error deleting user." });
+        } finally {
+            // Close the MongoDB client after the operation
+            client.close();
+        }
+    });
 };

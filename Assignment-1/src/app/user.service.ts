@@ -17,7 +17,7 @@ export class UserService {
 
   // Fetch all users
   getUsers(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/users`)
+    return this.http.get(`${this.apiUrl}/getUsers`)
       .pipe(
         catchError(this.handleError)
       );
@@ -25,7 +25,7 @@ export class UserService {
 
   // User registration
   registerUser(userData: any): Observable<any> {
-    userData.role = 'user'; // Defaulting the role to 'user' on registration
+    userData.role = '';
     userData.groups = 0; // Default value for groups
     userData.valid = true; // Default value for validity
     
@@ -35,12 +35,20 @@ export class UserService {
         );
   }
 
-  deleteUser(userId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/deleteUser/${userId}`, this.httpOptions)
+
+
+  deleteUser(email: string): Observable<any> {
+    const options = {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+        body: { email }, // Pass the email in the request body
+    };
+    
+    return this.http.delete(`${this.apiUrl}/deleteUser/${email}`, options)
         .pipe(
             catchError(this.handleError)
         );
 }
+
 
 updateUserRole(userId: number, newRole: string): Observable<any> {
   const data = {

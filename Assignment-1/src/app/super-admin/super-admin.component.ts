@@ -27,16 +27,16 @@ export class SuperAdminComponent implements OnInit {
   constructor(private userService: UserService, private httpClient: HttpClient, private router: Router) { }
 
   ngOnInit() {
+    this.fetchUserGroups();
     // const userRole = sessionStorage.getItem('role');
-    // console.log('User Role:', userRole);
-  
-    // if (userRole !== 'superadmin') {
-    //   alert('You don\'t have permission to access this page.');
-    //   this.router.navigateByUrl('dashboard');
-    // }
+
+    //     if (userRole !== 'superadmin') {
+    //         alert('You don\'t have permission to access this page.');
+    //         this.router.navigateByUrl('dashboard');
+    //     }
   }
   
-  
+
 
   onSubmit() {
     this.userService.registerUser(this.newUser).subscribe(
@@ -47,7 +47,7 @@ export class SuperAdminComponent implements OnInit {
           this.users.push({
             ...this.newUser,
             userid: this.users.length + 1, 
-            role: 'user', 
+            role: '', 
             groups: 0
           });
           // Reset the newUser object
@@ -87,7 +87,8 @@ export class SuperAdminComponent implements OnInit {
     );
     
   }
-  upgradeToSuperAdmin(user: any) {
+
+upgradeToSuperAdmin(user: any) {
     this.updateUserRole(user, 'superadmin');
 }
 
@@ -101,32 +102,36 @@ degradeToUser(user: any) {
 
 private updateUserRole(user: any, newRole: string) {
     this.userService.updateUserRole(user.userid, newRole).subscribe(
-        response => {
+        (response: any) => {
             console.log(response.message);
             // Update the role of the user locally
             user.role = newRole;
             console.log(user.role);
         },
-        error => {
+        (error: any) => {
             console.error("Error updating user role:", error);
         }
     );
 }
 
-  deleteUser(user: any) {
-    this.userService.deleteUser(user.userid).subscribe(
-        response => {
-            console.log(response.message);
 
-            // Remove the user from the local users array
-            const index = this.users.indexOf(user);
-            if (index > -1) {
-                this.users.splice(index, 1);
-            }
-        },
-        error => {
-            console.error("Error deleting user:", error);
-        }
-    );
+deleteUser(user: any) {
+  this.userService.deleteUser(user.email).subscribe(
+      response => {
+          console.log(response.message);
+
+          // Remove the user from the local users array
+          const index = this.users.indexOf(user);
+          if (index > -1) {
+              this.users.splice(index, 1);
+          }
+      },
+      error => {
+          console.error("Error deleting user:", error);
+      }
+  );
 }
+
+
+
 }

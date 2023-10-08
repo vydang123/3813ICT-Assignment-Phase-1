@@ -4,7 +4,6 @@ const cors = require('cors');
 const http = require('http').Server(app);
 
 const PORT = 3000;
-const ObjectID = require('mongodb').ObjectID;
 const url = "mongodb://127.0.0.1:27017/";
 const bodyParser = require('body-parser');
 const path = require('path');

@@ -1,30 +1,27 @@
-module.exports = function (db, app, client) {
-  app.post('/updateUserRole', async (req, res) => {
-    await client.connect();
+module.exports = async (db, app, client) => {
+    app.put('/updateUserRole', async (req, res) => {
+        const { userId, newRole } = req.body;
 
-    try {
-      const { userId, newRole } = req.body;
+        try {
+            await client.connect(); // Connect to MongoDB
 
-      // Assuming you have a 'users' collection in your MongoDB
-      const userCollection = db.collection('users');
+            const usersCollection = db.collection('users');
 
-      // Find user by userId and update the role
-      const updatedUser = await userCollection.findOneAndUpdate(
-        { userid: userId },
-        { $set: { role: newRole } },
-        { returnOriginal: false }
-      );
+            // Find user and update role
+            const user = await usersCollection.findOne({ userid: userId });
+            if (user) {
+                // Update the user's role
+                await usersCollection.updateOne({ _id: user._id }, { $set: { role: newRole } });
 
-      if (updatedUser.value) {
-        return res.send({ message: 'User role updated successfully.' });
-      } else {
-        return res.status(404).send({ message: 'User not found.' });
-      }
-    } catch (err) {
-      console.error('Error in updateUserRole:', err);
-      return res.status(500).send({ message: 'Error updating user role.' });
-    } finally {
-      client.close();
-    }
-  });
+                res.send({ message: "User role updated successfully." });
+            } else {
+                res.status(404).send({ message: "User not found." });
+            }
+        } catch (err) {
+            console.error("Error updating user role:", err);
+            res.status(500).send({ message: "Error updating user role." });
+        } finally {
+            await client.close(); // Close MongoDB connection
+        }
+    });
 };

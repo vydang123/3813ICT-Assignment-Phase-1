@@ -7,7 +7,6 @@ module.exports = (db, app, client) => {
         return res.sendStatus(400);
       }
 
-      const db = client.db('assignment'); // Replace with your actual database name
       const groupCollection = db.collection('group-channel'); // Replace 'group-channel' with your actual collection name
 
       const insertedGroup = await groupCollection.insertOne(req.body);

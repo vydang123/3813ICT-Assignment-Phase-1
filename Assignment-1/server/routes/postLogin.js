@@ -15,8 +15,8 @@ module.exports = function(db, app, client ) {
                   user: {
                       userid: user.userid,
                       username: user.username,
-                      roles: user.roles,
-                      groups: user.groups,
+                      role: user.role,
+                      groupids: user.groupids,
                       email: user.email
                   }
               });

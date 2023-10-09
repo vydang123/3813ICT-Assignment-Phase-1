@@ -1,26 +1,25 @@
-module.exports = (db, app, client) => {
-  app.delete('/deleteGroup/:groupId', async (req, res) => {
-    const groupId = Number(req.params.groupId);
+// deleteGroup.js
 
+module.exports = async (db, app, client) => {
+  app.delete('/api/deleteGroup/:groupName', async (req, res) => {
     try {
+      // Connect to the MongoDB client
       await client.connect();
 
-      const db = client.db('assignment'); // Replace with your actual database name
+      const groupName = req.params.groupName;
+      const result = await db.collection('group-channel').deleteOne({ groupname: groupName });
 
-      const groupCollection = db.collection('group-channel'); // Replace 'group-channel' with your actual collection name
-
-      const deletedGroup = await groupCollection.findOneAndDelete({ groupid: groupId });
-
-      if (!deletedGroup.value) {
-        return res.status(404).send({ success: false, message: 'Group not found.' });
+      if (result.deletedCount === 1) {
+        res.status(200).json({ message: `Group ${groupName} deleted successfully.` });
+      } else {
+        res.status(404).json({ message: `Group ${groupName} not found.` });
       }
-
-      res.send({ success: true, message: 'Group deleted successfully.' });
-    } catch (err) {
-      console.error('Error in deleteGroup:', err);
-      return res.status(500).send({ success: false, message: 'Server error.' });
+    } catch (error) {
+      console.error("Error deleting group:", error);
+      res.status(500).json({ message: "An error occurred while deleting the group." });
     } finally {
-      client.close();
+      // Close the MongoDB client connection
+      await client.close();
     }
   });
 };

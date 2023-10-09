@@ -14,6 +14,7 @@ module.exports = function (db, app, client) {
 
       if (action === 'listUser') {
         const users = await userCollection.find().toArray();
+        console.log(users);
         return res.send({ users: users });
       }
 

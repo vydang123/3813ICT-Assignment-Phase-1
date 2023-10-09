@@ -1,43 +1,55 @@
 module.exports = (db, app, client) => {
-  app.post('/addUserToGroup', async (req, res) => {
-    try {
-      await client.connect();
+  app.put('/addUserToGroup', async (req, res) => {
+      const username = req.body.username;
+      const groupname = req.body.groupname;
 
-      const userId = Number(req.body.userId);
-      const groupId = Number(req.body.groupId);
-
-      if (!userId || !groupId) {
-        return res.status(400).send({ success: false, message: 'userId and groupId are required.' });
+      if (!username || !groupname) {
+          return res.status(400).send({ success: false, message: 'Username and groupname are required.' });
       }
 
-      const db = client.db('assignment'); // Replace with your actual database name
-      const groupCollection = db.collection('group-channel'); // Replace 'group-channel' with your actual collection name
-      const userCollection = db.collection('users'); // Replace 'users' with your actual collection name
+      try {
+          // Add client.connect to establish a connection to the MongoDB server
+          await client.connect();
 
-      const updatedGroup = await groupCollection.findOneAndUpdate(
-        { groupId: groupId },
-        { $push: { members: userId } }
-      );
+          const groupCollection = db.collection('group-channel');
+          const userCollection = db.collection('users');
 
-      if (!updatedGroup.value) {
-        return res.status(400).send({ success: false, message: 'Group not found.' });
+          const group = await groupCollection.findOne({ groupname: groupname });
+
+          if (!group) {
+              return res.status(400).send({ success: false, message: 'Group not found.' });
+          }
+
+          if (!Array.isArray(group.members)) {
+              group.members = [];
+          }
+
+          const user = await userCollection.findOne({ username: username });
+
+          if (user) {
+              if (!Array.isArray(user.groupnames)) {
+                  user.groupnames = [];
+              }
+              if (!user.groupnames.includes(groupname)) {
+                  user.groupnames.push(groupname);
+              }
+
+              await userCollection.updateOne({ username: username }, { $set: { groupnames: user.groupnames } });
+          }
+
+          if (!group.members.includes(username)) {
+              group.members.push(username);
+          }
+
+          await groupCollection.updateOne({ groupname: groupname }, { $set: { members: group.members } });
+
+          res.send({ success: true, message: 'User added to group.' });
+      } catch (error) {
+          console.error('Error adding user to group:', error);
+          return res.status(500).send({ success: false, message: 'Server error.' });
+      } finally {
+          // Close the connection when done
+          await client.close();
       }
-
-      const updatedUser = await userCollection.findOneAndUpdate(
-        { userId: userId },
-        { $addToSet: { groupids: groupId } }
-      );
-
-      if (!updatedUser.value) {
-        return res.status(400).send({ success: false, message: 'User not found.' });
-      }
-
-      res.send({ success: true, message: 'User added to group.' });
-    } catch (err) {
-      console.error('Error in addUserToGroup:', err);
-      return res.status(500).send({ success: false, message: 'Server error.' });
-    } finally {
-      client.close();
-    }
   });
 };

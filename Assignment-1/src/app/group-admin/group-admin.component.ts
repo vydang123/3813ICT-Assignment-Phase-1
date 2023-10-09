@@ -40,10 +40,10 @@ export class GroupAdminComponent implements OnInit {
     this.fetchAllGroups();
     const userRole = sessionStorage.getItem('role');
 
-        // if (userRole !== 'groupadmin' && userRole !== 'superadmin') {
-        //     alert('You don\'t have permission to access this page.');
-        //     this.router.navigateByUrl('dashboard');
-        // }
+        if (userRole !== 'groupadmin' && userRole !== 'superadmin') {
+            alert('You don\'t have permission to access this page.');
+            this.router.navigateByUrl('dashboard');
+        }
   }
 
   fetchAllUsers(): void {
@@ -77,19 +77,21 @@ export class GroupAdminComponent implements OnInit {
     }
   }
 
-  addUserToGroup(user: any, group: any): void {
+addUserToGroup(user: any, group: any): void {
+  console.log('aaa')
     const payload = {
-      userId: user.userid || user,
-      groupId: group.groupid || group
+      username: user.username || user,
+      groupname: group.groupname || group
     };
-    console.log(payload)
+
     this.httpClient.put<any>(BACKEND_URL + 'addUserToGroup', payload, httpOptions).subscribe(response => {
+      console.log("bbb")
       if (response.success) {
         // Avoid mutating the original user object
         this.users = this.users.map(u => {
-          if (u.userid === user.userid) {
-            return { ...u, groupids: [...u.groupids, group.groupid || group] };
-
+          console.log("ccc")  
+          if (u.username === user.username) {
+            return { ...u, groupnames: [...u.groupnames, group.groupname || group] };
           }
           return u;
         });
@@ -99,17 +101,21 @@ export class GroupAdminComponent implements OnInit {
     });
 }
 
+
 // Method to add channel to a group
 // Method to add channel to a group
 addChannelToGroup(): void {
+  console.log('aaa')
   if (this.newChannelName && this.selectedGroupForChannel) {
+    console.log("bbb")
       const payload = {
           groupName: this.newChannelName,
           groupId: this.selectedGroupForChannel
       };
       
       this.httpClient.post<any>(BACKEND_URL + 'addChannel', payload, httpOptions).subscribe(response => {
-          if (response.success) {
+        console.log("ccc")  
+        if (response.success) {
               this.fetchAllGroups();
               alert('Channel added successfully!');
           }
@@ -161,21 +167,26 @@ deleteChannelFromGroup(channel: string, group: any): void {
   });
 }
 
-deleteGroup(group: any): void {
-  if (confirm(`Are you sure you want to delete the group: ${group.groupname}?`)) {
-    this.httpClient.delete<any>(`${BACKEND_URL}deleteGroup/${group.groupid}`, httpOptions).subscribe(response => {
-      if (response.success) {
-        const index = this.groups.findIndex(g => g.groupid === group.groupid);
-        if (index !== -1) {
-          this.groups.splice(index, 1);
-        }
-        alert('Group deleted successfully!');
-      }
-    }, error => {
-      console.error('Error deleting group:', error);
-    });
+async deleteGroup(selectedGroup: any): Promise<void> {
+  if (!selectedGroup || !selectedGroup.groupname) {
+    alert("Please select a group to delete.");
+    return;
+  }
+
+  const groupName = selectedGroup.groupname;
+
+  try {
+    // Send a DELETE request to your server to delete the group by name
+    await this.httpClient.delete(`${BACKEND_URL}api/deleteGroup/${groupName}`, httpOptions).toPromise();
+    alert(`Group ${groupName} deleted successfully.`);
+    // Refresh the groups list or remove the deleted group from 'groups' array
+    this.fetchAllGroups();
+  } catch (error) {
+    console.error("Error deleting group:", error);
+    alert("An error occurred while deleting the group.");
   }
 }
+
 
 
 }

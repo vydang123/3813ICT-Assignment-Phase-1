@@ -28,12 +28,12 @@ export class SuperAdminComponent implements OnInit {
 
   ngOnInit() {
     this.fetchUserGroups();
-    // const userRole = sessionStorage.getItem('role');
+    const userRole = sessionStorage.getItem('role');
 
-    //     if (userRole !== 'superadmin') {
-    //         alert('You don\'t have permission to access this page.');
-    //         this.router.navigateByUrl('dashboard');
-    //     }
+        if (userRole !== 'superadmin') {
+            alert('You don\'t have permission to access this page.');
+            this.router.navigateByUrl('dashboard');
+        }
   }
   
 

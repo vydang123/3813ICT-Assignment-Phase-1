@@ -1,14 +1,19 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const http = require('http').Server(app);
+const http = require('http');
+// Setup http server with express app
+const server = http.createServer(app);
+
+// Use the setupSockets function from sockets.js
+const { setupSockets } = require('./sockets');
+setupSockets(server);
+
 
 const PORT = 3000;
-const url = "mongodb://127.0.0.1:27017/";
+
 const bodyParser = require('body-parser');
 const path = require('path');
-
-const server = require('./listen.js');
 
 const dbName = 'assignment';
 
@@ -36,7 +41,16 @@ app.use(express.static(path.join(__dirname, '/../dist/week4tut')));
   require('./routes/postRegister.js')(db, app, client);
   require('./routes/removeUser.js')(db, app, client);
   require('./routes/updateUserRole.js')(db, app, client);
-  require('./listen.js')(http,PORT);
+ 
+
+// Start the server listening on the specified port
+server.listen(PORT, "localhost", function() {
+  var d = new Date();
+  var n = d.getHours();
+  var m = d.getMinutes();
+
+  console.log(`Server has been started at: ${n}:${m}`);
+});
 
 
   

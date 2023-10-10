@@ -1,71 +1,46 @@
-/* Container styles */
-.chat-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-}
-
-/* Form styles */
+/* Style for the form container */
 form {
     display: flex;
     flex-direction: row;
     align-items: center;
     margin-bottom: 20px;
-}
-
-input[type="text"] {
-    flex: 1;
+  }
+  
+  /* Style for the input field */
+  input[type="text"] {
     padding: 10px;
-    font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    flex-grow: 1;
     margin-right: 10px;
-}
-
-button {
+  }
+  
+  /* Style for the submit button */
+  button[type="submit"] {
+    padding: 10px 20px;
     background-color: #007bff;
     color: #fff;
-    padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    font-size: 16px;
     cursor: pointer;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-/* Message list styles */
-ul {
+  }
+  
+  /* Style for the message list */
+  ul {
     list-style: none;
     padding: 0;
-    margin: 0;
-}
-
-li {
-    background-color: #f4f4f4;
-    padding: 10px;
-    border-radius: 5px;
+  }
+  
+  li {
     margin-bottom: 10px;
-    font-size: 16px;
-}
-
-/* Responsive styles */
-@media (max-width: 768px) {
-    form {
-        flex-direction: column;
-    }
-
-    input[type="text"] {
-        width: 100%;
-        margin-right: 0;
-        margin-bottom: 10px;
-    }
-
-    button {
-        width: 100%;
-    }
-}
+    padding: 10px;
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  /* Add some margin to the top of the message list */
+  ul + ul {
+    margin-top: 20px;
+  }
+  

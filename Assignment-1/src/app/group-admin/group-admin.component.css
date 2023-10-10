@@ -13,7 +13,8 @@
 .add-user-form,
 .add-channel-form,
 .delete-channel-form,
-.add-user-channel-form {
+.add-user-channel-form,
+.remove-group-user-form {
     padding: 15px;
     margin-bottom: 20px;
     border: 1px solid #e1e1e1;

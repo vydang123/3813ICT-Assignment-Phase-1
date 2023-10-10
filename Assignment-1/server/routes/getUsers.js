@@ -16,7 +16,7 @@ module.exports = function (db, app, client) {
       
     } catch (err) {
       console.error('Error in getUsers:', err);
-      res.status(500).send({ message: 'Error retrieving users.' });
+      return res.status(500).send({ message: 'Error retrieving users.' });
     } finally {
       client.close();
     }

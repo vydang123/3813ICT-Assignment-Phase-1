@@ -30,9 +30,24 @@
         </select>
 
         <button (click)="addUserToGroup(username, groupname)">Add User to Group</button> <!-- Added arguments -->
-        <button (click)="removeUserFromGroup(username, groupname)">Remove User from Group</button>
+        
     </div>
 
+     <!-- Remove user from group -->
+     <div class="remove-group-user-form">
+        <label>Select Group:</label>
+        <select [(ngModel)]="selectedGroup" (change)="filterUsersByGroup()">
+            <option *ngFor="let group of groups" [value]="group.groupname">{{ group.groupname }}</option>
+        </select>
+        
+        <label>Select User:</label>
+        <select [(ngModel)]="selectedUser">
+            <option *ngFor="let user of filteredUsers" [value]="user.username">{{ user.username }}</option>
+        </select>
+        <button (click)="removeUserFromGroup()">Remove User from Group</button>
+    </div>
+    
+    
     <!-- Add channel to group -->
 <div class="add-channel-form">
     <label>Channel Name:</label>

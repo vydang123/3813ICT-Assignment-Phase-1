@@ -150,16 +150,27 @@ addChannelToGroup(): void {
 }
 
 //remove a user from a group
-removeUserFromGroup(username: string, groupname: string): void {
-  if (username && groupname) {
+filteredUsers: any[] = []; // Store filtered users here
+filterUsersByGroup(): void {
+  if (this.selectedGroup) {
+    this.filteredUsers = this.users.filter(user => user.groupnames.includes(this.selectedGroup));
+    this.selectedUser = ''; // Clear the selected user when a new group is selected.
+  } else {
+    this.filteredUsers = [];
+  }
+}
+
+removeUserFromGroup(): void {
+  if (this.selectedGroup && this.selectedUser) {
     const requestBody = {
-      username: username,
-      groupname: groupname
+      groupname: this.selectedGroup,
+      username: this.selectedUser
     };
 
     this.httpClient.post<any>(BACKEND_URL + 'removeUserFromGroup', requestBody, httpOptions).subscribe(response => {
       if (response.success) {
         alert('User removed from the group successfully!');
+        this.fetchAllUsers
       } else {
         alert('Failed to remove user from the group: ' + response.message);
       }
@@ -167,10 +178,9 @@ removeUserFromGroup(username: string, groupname: string): void {
       console.error('Error removing user from the group:', error);
     });
   } else {
-    alert('Please select a user and a group to remove.');
+    alert('Please select a group and a user to remove.');
   }
 }
-
 
 deleteChannelFromGroup(channel: string, group: any): void {
   const payload = {

@@ -15,18 +15,11 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  // Fetch all users
-  getUsers(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/getUsers`)
-      .pipe(
-        catchError(this.handleError)
-      );
-  }
 
   // User registration
   registerUser(userData: any): Observable<any> {
     userData.role = '';
-    userData.groups = 0; // Default value for groups
+    userData.groupnames = []; // Default value for groups
     userData.valid = true; // Default value for validity
     
     return this.http.post(`${this.apiUrl}/register`, userData, this.httpOptions)

@@ -1,31 +1,54 @@
-module.exports = (db, app, client) => {
-  app.delete('/removeUser/:userId/:groupId', async (req, res) => {
-    const userId = Number(req.params.userId);
-    const groupId = Number(req.params.groupId);
+module.exports = async (db, app, client) => {
+  app.post('/removeUserFromGroup', async (req, res) => {
+      const username = req.body.username; // Change the parameter to 'username'
+      const groupname = req.body.groupname; // Change the parameter to 'groupname'
 
-    try {
-      await client.connect();
-
-      const db = client.db('assignment'); // Replace with your actual database name
-
-      const userCollection = db.collection('users'); // Replace 'users' with your actual collection name
-
-      const user = await userCollection.findOne({ userid: userId });
-
-      if (!user) {
-        return res.status(400).send({ message: "User not found." });
+      if (!username || !groupname) {
+          return res.status(400).send({ success: false, message: 'username and groupname are required.' });
       }
 
-      const groupIds = user.groupids.filter(id => id !== groupId);
+      // Connect to the MongoDB client
+      await client.connect();
 
-      await userCollection.updateOne({ userid: userId }, { $set: { groupids: groupIds } });
+      const groupCollection = db.collection('group-channel');
+      const userCollection = db.collection('users');
 
-      return res.send({ message: "User removed from group successfully." });
-    } catch (err) {
-      console.error('Error in removeUser:', err);
-      return res.status(500).send({ message: "Server error." });
-    } finally {
-      client.close();
-    }
+      try {
+          // Check if the group exists
+          const group = await groupCollection.findOne({ groupname: groupname });
+          if (!group) {
+              return res.status(400).send({ success: false, message: 'Group not found.' });
+          }
+
+          // Find the user by username
+          const user = await userCollection.findOne({ username: username });
+          if (!user) {
+              return res.status(400).send({ success: false, message: 'User not found.' });
+          }
+
+          // Remove userId from group members
+          if (group.members && group.members.includes(user.userid)) {
+              group.members = group.members.filter(memberId => memberId !== user.userid);
+
+              // Update the group in the database
+              await groupCollection.updateOne({ groupname: groupname }, { $set: group });
+          }
+
+          // Remove groupname from user's groupnames array
+          if (user.groupnames && user.groupnames.includes(group.groupname)) {
+              user.groupnames = user.groupnames.filter(groupName => groupName !== group.groupname);
+
+              // Update the user in the database
+              await userCollection.updateOne({ username: username }, { $set: user });
+          }
+
+          res.send({ success: true, message: 'User removed from group.' });
+      } catch (error) {
+          console.error('Error removing user from group:', error);
+          return res.status(500).send({ success: false, message: 'Server error.' });
+      } finally {
+          // Close the MongoDB client connection
+          await client.close();
+      }
   });
 };

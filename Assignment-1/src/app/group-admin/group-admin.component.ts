@@ -23,6 +23,8 @@ export class GroupAdminComponent implements OnInit {
   selectedUser: any; // Added this property
   selectedGroup: any = {}; // initialize as an empty object
   selectedChannel: string = "";
+  username: any;
+  groupname: any; 
 
   users: any[] = [];
   groups: any[] = [];
@@ -47,16 +49,30 @@ export class GroupAdminComponent implements OnInit {
   }
 
   fetchAllUsers(): void {
-    this.httpClient.get<any>(BACKEND_URL + 'getUsers', httpOptions).subscribe(data => {
-      this.users = data;
-    });
+    this.httpClient.get<any[]>(BACKEND_URL + 'getUsers', httpOptions).subscribe(
+      (users) => {
+        this.users = users;
+      },
+      (error) => {
+        console.error('Error fetching users:', error);
+        // Handle error appropriately (e.g., show an error message)
+      }
+    );
   }
 
   fetchAllGroups(): void {
-    this.httpClient.get<any>(BACKEND_URL + 'getGroups', httpOptions).subscribe(data => {
-      this.groups = data;
-    });
+    this.httpClient.get<any[]>(BACKEND_URL + 'getGroups', httpOptions).subscribe(
+      (groups) => {
+        this.groups = groups;
+      },
+      (error) => {
+        console.error('Error fetching groups:', error);
+        // Handle error appropriately (e.g., show an error message)
+      }
+    );
   }
+
+
 
   addGroup(): void {
     if (this.newGroup.groupname) {
@@ -77,29 +93,36 @@ export class GroupAdminComponent implements OnInit {
     }
   }
 
-addUserToGroup(user: any, group: any): void {
-  console.log('aaa')
-    const payload = {
-      username: user.username || user,
-      groupname: group.groupname || group
-    };
-
-    this.httpClient.put<any>(BACKEND_URL + 'addUserToGroup', payload, httpOptions).subscribe(response => {
+  // Add this method to add a user to a group
+  addUserToGroup(username: any, groupname: any): void {
+    console.log("aaa")
+    if (username && groupname) {
       console.log("bbb")
-      if (response.success) {
-        // Avoid mutating the original user object
-        this.users = this.users.map(u => {
-          console.log("ccc")  
-          if (u.username === user.username) {
-            return { ...u, groupnames: [...u.groupnames, group.groupname || group] };
+      // Prepare the request body
+      const requestBody = {
+        username: username,
+        groupname: groupname
+      };
+
+      // Make a POST request to the backend API
+      this.httpClient.post<any>(BACKEND_URL + 'addUserToGroup', requestBody, httpOptions).subscribe(
+        (response) => {
+          console.log("ccc")
+          if (response.success) {
+            alert('User added to the group successfully!');
+            this.fetchAllUsers
+          } else {
+            alert('Failed to add user to the group.');
           }
-          return u;
-        });
-      }
-    }, error => {
-      console.error('Error adding user to group:', error);
-    });
-}
+        },
+        (error) => {
+          console.error('Error adding user to group:', error);
+        }
+      );
+    } else {
+      alert('Please select a user and a group to add.');
+    }
+  }
 
 
 // Method to add channel to a group
@@ -118,6 +141,7 @@ addChannelToGroup(): void {
         if (response.success) {
               this.fetchAllGroups();
               alert('Channel added successfully!');
+              
           }
       }, error => {
           console.error('Error adding channel to group:', error);
@@ -125,27 +149,27 @@ addChannelToGroup(): void {
   }
 }
 
-removeUserFromGroup(user: any, group: any): void {
-  const payload = {
-      userId: user.userid || user,
-      groupId: group.groupid || group
-  };
+//remove a user from a group
+removeUserFromGroup(username: string, groupname: string): void {
+  if (username && groupname) {
+    const requestBody = {
+      username: username,
+      groupname: groupname
+    };
 
-  this.httpClient.delete<any>(`${BACKEND_URL}removeUser/${payload.userId}/${payload.groupId}`, httpOptions).subscribe(response => {
+    this.httpClient.post<any>(BACKEND_URL + 'removeUserFromGroup', requestBody, httpOptions).subscribe(response => {
       if (response.success) {
-          this.users = this.users.map(u => {
-              if (u.userid === user.userid) {
-                  return { ...u, groupid: null };  // Resetting the groupid to null for the user
-              }
-              return u;
-          });
-          alert('User removed from group!');
+        alert('User removed from the group successfully!');
+      } else {
+        alert('Failed to remove user from the group: ' + response.message);
       }
-  }, error => {
-      console.error('Error removing user from group:', error);
-  });
+    }, error => {
+      console.error('Error removing user from the group:', error);
+    });
+  } else {
+    alert('Please select a user and a group to remove.');
+  }
 }
-
 
 
 deleteChannelFromGroup(channel: string, group: any): void {

@@ -3,8 +3,6 @@ module.exports = (db, app, client) => {
     try {
       await client.connect();
 
-      const db = client.db('assignment'); // Replace with your actual database name
-
       const groupCollection = db.collection('group-channel'); // Replace 'group-channel' with your actual collection name
 
       const groups = await groupCollection.find({}).toArray();

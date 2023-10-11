@@ -33,7 +33,9 @@ export class LoginComponent implements OnInit {
           sessionStorage.setItem('userid', data.user.userid);
           sessionStorage.setItem('username', data.user.username);
           sessionStorage.setItem('role', data.user.role); 
-          sessionStorage.setItem('groupids', data.user.groupids);
+          sessionStorage.setItem('groupnames', JSON.stringify(data.user.groupnames));
+
+          sessionStorage.setItem('channelnames', JSON.stringify(data.user.channelnames));
           sessionStorage.setItem('isLoggedin', 'true'); 
           // Storing the entire user object in sessionStorage
           sessionStorage.setItem('user', JSON.stringify(data.user));

@@ -17,7 +17,8 @@ module.exports = function(db, app, client ) {
                       username: user.username,
                       role: user.role,
                       groupnames: user.groupnames,
-                      email: user.email
+                      email: user.email,
+                      channelnames: user.channelnames
                   }
               });
           } else {

@@ -32,6 +32,7 @@ app.use(express.static(path.join(__dirname, '/../dist/week4tut')));
   require('./routes/addChannel.js')(db, app, client);
   require('./routes/addGroup.js')(db, app, client);
   require('./routes/addUserToGroup.js')(db, app, client);
+  require('./routes/addUserToChannel.js')(db, app, client);
   require('./routes/createGroup.js')(db, app, client);
   require('./routes/deleteChannelFromGroup.js')(db, app, client);
   require('./routes/deleteGroup.js')(db, app, client);
@@ -41,6 +42,7 @@ app.use(express.static(path.join(__dirname, '/../dist/week4tut')));
   require('./routes/postRegister.js')(db, app, client);
   require('./routes/removeUser.js')(db, app, client);
   require('./routes/updateUserRole.js')(db, app, client);
+  require('./routes/getGroupsChannels.js')(db, app, client);
  
 
 // Start the server listening on the specified port

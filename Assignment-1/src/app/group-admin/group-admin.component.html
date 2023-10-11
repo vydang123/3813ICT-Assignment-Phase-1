@@ -78,6 +78,25 @@
     <button (click)="deleteChannelFromGroup(selectedChannel, selectedGroup)">Delete Channel from Group</button>
 </div>
 
+<!-- Add user to channel within a group -->
+<div class="add-user-to-channel-form">
+    <label>Select User:</label>
+    <select [(ngModel)]="username" (change)="filterGroups(username)">
+        <option *ngFor="let user of users" [value]="user.username">{{ user.username }}</option>
+    </select>
+    
+    <label>Select Group:</label>
+    <select [(ngModel)]="groupname" (change)="filterChannels(groupname)">
+        <option *ngFor="let group of groups" [value]="group.groupname">{{ group.groupname }}</option>
+    </select>
+
+    <label>Select Channel:</label>
+    <select [(ngModel)]="channelname">
+        <option *ngFor="let channel of channels" [value]="channel">{{ channel }}</option>
+    </select>
+
+    <button (click)="addUserToChannel(username, groupname, channelname)">Add User to Channel</button>
+</div>
 
 
 
@@ -91,7 +110,7 @@
     <h3>Users</h3>
 <ul>
     <li *ngFor="let user of users">
-        {{ user.username }} - Groups: {{ user.groupnames }}
+        {{ user.username }} - Groups: {{ user.groupnames }} - Channel: {{ user.channelnames }}
         
     </li>
 </ul>

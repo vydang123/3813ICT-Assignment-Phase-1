@@ -12,13 +12,13 @@ export class ChatService {
     this.socket = io('http://localhost:3000');
    }
 
-   sendMessage(message: string) {
+   sendMessage(message: any) {
     this.socket.emit('newMessage', message);
   }
   
-  getMessages(): Observable<string> {
-    return new Observable<string>((observer: any) => {
-      this.socket.on('broadcastMessage', (message: string) => {
+  getMessages(): Observable<any> {
+    return new Observable<any>((observer: any) => {
+      this.socket.on('broadcastMessage', (message: any) => {
         observer.next(message);
       });
     });

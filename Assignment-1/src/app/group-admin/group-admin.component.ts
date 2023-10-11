@@ -25,9 +25,13 @@ export class GroupAdminComponent implements OnInit {
   selectedChannel: string = "";
   username: any;
   groupname: any; 
+  channelname: string = '';
 
   users: any[] = [];
+  userGroups: string[] = [];
+  groupChannels: string[] = [];
   groups: any[] = [];
+  channels: any[] = []; // Populate with available channels
 
   // Add the new properties:
   newChannelName: string = '';
@@ -199,6 +203,63 @@ deleteChannelFromGroup(channel: string, group: any): void {
   }, error => {
       console.error('Error removing channel from group:', error);
   });
+}
+
+// Add this method to filter groups based on user's groupnames
+filterGroups(username: string): void {
+  console.log("aaa")
+  const user = this.users.find((u) => u.username === username);
+
+  if (user) {
+    console.log("bbb")
+    // Filter available groups based on user's groupnames
+    this.groups = this.groups.filter((group) => user.groupnames.includes(group.groupname));
+  }
+}
+
+// Add this method to filter channels based on selected group
+filterChannels(groupname: string): void {
+  console.log("ccc")
+  const selectedGroup = this.groups.find((group) => group.groupname === groupname);
+
+  if (selectedGroup) {
+    console.log("ddd")
+    // Filter available channels based on the selected group
+    this.channels = selectedGroup.channels;
+  }
+}
+
+// Add this method to add a user to a channel within a group
+addUserToChannel(username: any, groupname: any, channelname: any): void {
+  console.log("eee")
+  if (username && groupname && channelname) {
+    // Prepare the request body
+    const requestBody = {
+      username: username,
+      groupname: groupname,
+      channelname: channelname
+    };
+
+    // Make a POST request to the backend API
+    this.httpClient.post<any>(BACKEND_URL + 'addUserToChannel', requestBody, httpOptions).subscribe(
+      (response) => {
+        console.log("fff")
+        if (response.success) {
+          console.log("bbb")
+          alert('User added to the channel successfully!');
+        } else {
+          console.log("ggg")
+          alert('Failed to add user to the channel.');
+        }
+      },
+      (error) => {
+        console.log("hhh")
+        console.error('Error adding user to channel:', error);
+      }
+    );
+  } else {
+    alert('Please select a user, a group, and a channel to add.');
+  }
 }
 
 async deleteGroup(selectedGroup: any): Promise<void> {

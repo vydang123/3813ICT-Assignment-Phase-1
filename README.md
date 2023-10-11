@@ -19,7 +19,8 @@
 
 # Data Structure
 
-## users.json
+users.json and group-channel.json are imported to mongodb under database 'assignment' as collections 'users' and 'group-channel' respectively.
+## users collection
 Main Data Structures:
 * 	Array of User Objects: Each object in this array represents a user in the system.
 Attributes of a User Object:
@@ -31,7 +32,7 @@ Attributes of a User Object:
 * 	password: A string representing the user's password (usually, passwords shouldn't be stored in plain text for security reasons).
 * 	valid: A boolean indicating whether the user's account is valid or not.
 
-## group-channel.json
+## group-channel collection
 Main Data Structures:
 * 	Array of Group-Channel Objects: Each object in this array represents a group with its associated channels.
 Attributes of a Group-Channel Object:
@@ -41,426 +42,257 @@ Attributes of a Group-Channel Object:
 * 	members: An array of integers representing the user IDs of members associated with the group.
 
 # REST API
-server.js: 
-
-* app.post('/login', require('./routes/postLogin'));
-* app.post('/register',require('./routes/postRegister'));
-* app.delete('/deleteUser/:userId', require('./routes/deleteUser'));
-* app.put('/updateUserRole', require('./routes/updateUserRole'));
-* app.get('/users', require('./routes/getUsers'));
-* app.get('/groups', require('./routes/getGroups'));
-* app.put('/addUserToGroup', require('./routes/addUserToGroup'));
-* app.post('/addGroup', require('./routes/addGroup'));
-* app.post('/addChannel', require('./routes/addChannel'));
-* app.delete('/deleteChannelFromGroup/:channelId/:groupId', require('./routes/* deleteChannelFromGroup'));
-* app.delete('/deleteGroup/:groupId', require('./routes/deleteGroup'));
-* app.delete('/removeUser/:userId/:groupId', require('./routes/removeUser'));
-* app.post('/login', require('./routes/postLogin'));
-
-
-## app.post('/login', require('./routes/postLogin'));
-/login - Authenticate a user
-* 	HTTP Method: POST
-* 	Endpoint: /login
-* 	Handler: postLogin.js
-Parameters:
-Request Body:
-* 	email: The email of the user attempting to log in.
-* 	pwd: The password provided by the user.
-
-Return Values:
-* 	On success (i.e., email and password match an existing user):
-     *	valid: true
-     *	user:
-     *	userid: The user's unique identifier.
-     *	username: The name of the user.
-     *	role: The role assigned to the user (e.g., 'groupadmin', 'superadmin', 'user').
-     *	groupids: An array containing the IDs of groups the user belongs to.
-     *	email: The email of the user.
-* 	On failure (i.e., the provided email and password don't match any existing user):
-     *	valid: false
-Purpose:
-* 	The purpose of this route is to authenticate users based on the provided email and password.
-* 	When a POST request is made to this endpoint, the server will read from the users.json file to check if there's a user with the provided email and password.
-* 	If such a user is found, the server sends back a response with valid set to true and includes the user's details. If not, the server sends a response with valid set to false.
-
-How it works:
-* 	The postLogin.js module is imported and used as a handler for the /login route in the server.js file.
-* 	Within postLogin.js, the email and password are extracted from the request body using req.body.email and req.body.pwd, respectively.
-* 	The module then attempts to read the users.json file.
-* 	If an error occurs during the read operation, it throws an error.
-* 	If the file is read successfully, the data is parsed into a JSON array.
-* 	The array is searched to find a user with a matching email and password using the find() method.
-* 	If a matching user is found, a response is sent with valid set to true and the user's details. If no match is found, a response with valid set to false is sent.
-
-## app.post('/register',require('./routes/postRegister'));
-/register - Register a new user or list existing users
-* 	HTTP Method: POST
-* 	Endpoint: /register
-* 	Handler: postRegister.js
-Parameters:
-* 	Request Body:
-     *	General user data including but not limited to:
-       *	email: The email of the user being registered.
-       *	username: The username of the user being registered.
-       *	action: An optional action parameter that can have a value of "listUser". If this action is provided, the route will list all users.
-     *	Other attributes can be added depending on the user registration fields you have. These might include password, firstName, lastName, etc.
-
-Return Values:
-* 	If the action "listUser" is provided:
-     *	users: An array containing all registered users.
-* 	On successful registration:
-     *	valid: true
-* 	On failure (e.g., email already exists, error reading users, error writing to file):
-     *	valid: false
-     *	message: A descriptive error message indicating the reason for failure, such as 'Email already in use.' or 'Error writing to file.'
-
-Purpose:
-* 	The primary purpose of this route is to register a new user.
-* 	However, if the "listUser" action is provided in the request, the route will instead list all registered users.
-
-How it works:
-* 	The postRegister.js module is imported and used as a handler for the /register route in the server.js file.
-* 	Within postRegister.js, all user data is extracted from the request body using req.body.
-* 	The module uses the readusers() function to attempt to r*ad and parse the users.json file, which contains the data of all registered users.
-* 	If there's an error reading the users, a 500 server error response is sent back.
-* 	If the action provided is "listUser", it sends back a list of all users.
-* 	If the action is not "listUser", the module checks if the provided email or username is already in use by another registered user.
-* 	If either the email or username is already in use, a 400 error response is sent back.
-* 	If the email and username are unique, a new userid is generated for the new user, and the new user data is added to the users array.
-* 	The updated users array is then written back to the users.json file.
-* 	If there's an error during the write operation, a 500 server error response is sent back. If the write operation is successful, a response indicating a successful registration (valid: true) is sent back.
-
-
-## app.delete('/deleteUser/:userId', require('./routes/deleteUser'));
-/deleteUser/:userId - Delete a user by userId
-*	HTTP Method: DELETE
-*	Endpoint: /deleteUser/:userId
-*	Handler: deleteUser.js
-Parameters:
-*	URL Parameter:
-    *	userId: The unique identifier of the user that needs to be deleted.
-*	Return Values:
-
-*	On successful deletion:
-    *	message: "User deleted successfully."
-*	On error reading the file:
-    *	message: "Error reading the file."
-*	On error writing to the file:
-    *	message: "Error writing to the file."
-Purpose:
-*	The purpose of this route is to delete a user with a specific userId.
-*	When a DELETE request is made to this endpoint, the server will read from the users.json file and check if there's a user with the provided userId.
-*	If such a user is found, it is removed from the list and the updated list is written back to the users.json file. A successful response is then sent.
-*	If any errors are encountered during reading or writing operations, appropriate error messages are sent in the response.
-
-How it works:
-*	The deleteUser.js module is imported and used as a handler for the /deleteUser/:userId route in the server.js file.
-*	Within deleteUser.js, the userId is extracted from the URL parameters using req.params.userId.
-*	The module then attempts to read the users.json file.
-*	If an error occurs during the read operation, a response with an error message "Error reading the file." is sent.
-*	If the file is read successfully, the data is parsed into a JSON array.
-*	The array is filtered to exclude the user with the provided userId using the filter() method.
-*	The updated user list is then written back to the users.json file.
-*	If an error occurs during the write operation, a response with an error message "Error writing to the file." is sent.
-*	If no errors occur during the entire process, a response with the message "User deleted successfully." is sent.
-
-## app.put('/updateUserRole', require('./routes/updateUserRole'));
-/updateUserRole - Update the role of a user
-*	HTTP Method: PUT
-*	Endpoint: /updateUserRole
-*	Handler: updateUserRole.js
-
-Parameters:
-*	Request Body:
-    *	userId: The unique identifier of the user whose role needs to be updated.
-   	*	newRole: The new role that should be assigned to the user.
-Return Values:
-
-*	On successful role update:
-    *	message: "User role updated successfully."
-*	On error reading the file:
-    *	message: "Error reading the file."
-*	On error writing to the file:
-    *	message: "Error writing to the file."
-*	If the user is not found:
-    *	message: "User not found."
-Purpose:
-
-*	The purpose of this route is to update the role of a user with a specific userId.
-*	When a PUT request is made to this endpoint, the server will read from the users.json file, find the user with the provided userId, and update their role.
-*	If the user is found and the role is updated successfully, the updated list is written back to the users.json file and a success message is sent in the response.
-*	If any errors are encountered during reading, writing, or if the user is not found, appropriate error messages are sent in the response.
-
-How it works:
-*	The updateUserRole.js module is imported and used as a handler for the /updateUserRole route in the server.js file.
-*	Within updateUserRole.js, the userId and newRole are extracted from the request body.
-*	The module then attempts to read the users.json file.
-*	If an error occurs during the read operation, a response with an error message "Error reading the file." is sent.
-*	If the file is read successfully, the data is parsed into a JSON array.
-*	The array is searched to find a user with the provided userId using the find() method.
-*	If a user with the given userId is found, their role is updated to the value of newRole.
-*	The updated user list is then written back to the users.json file.
-*	If an error occurs during the write operation, a response with an error message "Error writing to the file." is sent.
-*	If no user with the provided userId is found, a response with the message "User not found." is sent.
-*	If no errors occur during the entire process and the user's role is updated, a response with the message "User role updated successfully." is sent.
-
-## app.get('/users', require('./routes/getUsers'));
-/users - Retrieve the list of all users
-
-*	HTTP Method: GET
-*	Endpoint: /users
-*	Handler: getUsers.js
-
-Parameters:
-No parameters required in the request body.
-
-Return Values:
-*	On successful retrieval of user data:
-    * A JSON array containing details of all users.
-*	On error reading the file:
-    * message: "Error reading the file."
-
-Purpose:
-*	The primary purpose of this route is to fetch and provide a list of all users.
-*	When a GET request is made to this endpoint, the server will read from the users.json file and send the user data in the response.
-*	If there's an error reading the file, a response with an appropriate error message is sent.
-
-How it works:
-*	The getUsers.js module is imported and used as a handler for the /users route in the server.js file.
-*	Within getUsers.js, the module attempts to read the users.json file.
-*	If an error occurs during the read operation, a response with the error message "Error reading the file." is sent.
-*	If the file is read successfully, the data is parsed into a JSON array and sent as the response.
-
-
-## app.get('/groups', require('./routes/getGroups'));
-/groups - Retrieve the list of all groups and their associated channels
-*	HTTP Method: GET
-*	Endpoint: /groups
-*	Handler: getGroups.js
-Parameters:
-*	No parameters required in the request body.
-Return Values:
-*	On successful retrieval of group data:
-    * A JSON array containing details of all groups and their associated channels.
-	On error reading the file:
-    * message: "Error reading the file."
-
-Purpose:
-*	The primary purpose of this route is to fetch and provide a list of all groups and their channels.
-*	When a GET request is made to this endpoint, the server will read from the group-channel.json file and send the group data in the response.
-*	If there's an error reading the file, a response with an appropriate error message is sent.
-
-How it works:
-*	The getGroups.js module is imported and used as a handler for the /groups route in the server.js file.
-*	Within getGroups.js, the module attempts to read the group-channel.json file.
-*	If an error occurs during the read operation, a response with the error message "Error reading the file." is sent.
-*	If the file is read successfully, the data is parsed into a JSON array and sent as the response.
-
-
-## app.put('/addUserToGroup', require('./routes/addUserToGroup'));
-/addUserToGroup - Add a user to a specified group
-*	HTTP Method: PUT
-*	Endpoint: /addUserToGroup
-*	Handler: addUserToGroup.js
-Parameters:
-*	Request Body:
-    *	userId: The ID of the user that needs to be added to the group. This value should be a number or a string that can be converted to a number.
-    *	groupId: The ID of the group to which the user will be added. This value should be a number or a string that can be converted to a number.
-
-Return Values:
-*	On successful addition of the user to the group:
-    *	success: true
-    *	message: "User added to group."
-*	On invalid or missing parameters:
-    *	success: false
-    *	message: "userId and groupId are required."
-*	On server errors (e.g., reading or writing to the file):
-    *	success: false
-    *	message: "Server error."
-    *	If the specified group is not found:
-    *	success: false
-    *	message: "Group not found."
-
-Purpose:
-*	The purpose of this route is to add a specific user to a particular group.
-*	When a PUT request is made to this endpoint, the server attempts to update both the group-channel.json and users.json files to reflect the user's membership in the group.
-*	Error messages are returned if there are any issues, such as missing parameters or server errors during file reading/writing.
-
-How it works:
-*	The addUserToGroup.js module is imported and used as a handler for the /addUserToGroup route in the server.js file.
-*	Within addUserToGroup.js, the userId and groupId are extracted from the request body and converted to numbers.
-*	The server reads the group-channel.json file to determine if the group exists.
-*	If the group exists, the user's ID is added to the group's list of members.
-*	The server then reads the users.json file to determine if the user exists.
-*	If the user exists, the group's ID is added to the user's list of groups.
-*	Finally, the updated data is written back to both files (group-channel.json and users.json).
-*	Appropriate response messages are sent based on the outcome of each operation.
-
-
-## app.post('/addGroup', require('./routes/addGroup'));
-/addGroup - Add a new group
-*	HTTP Method: POST
-*	Endpoint: /addGroup
-*	Handler: addGroup.js
-
-Parameters:
-*	Request Body:
-    *	The request body should contain the group details you want to add. The exact structure depends on the schema you've defined for a group in group-channel.json. Typically, this could include fields like groupid, groupName, members, etc.
-
-Return Values:
-
-*	On successful addition of the group:
-    *	success: true
-    *	message: "Group added successfully."
-*	On server errors (e.g., reading or writing to the file):
-    *	message: "Error reading the file." or "Error writing to the file."
-
-Purpose:
-*	The purpose of this route is to allow clients to add a new group to the existing list of groups.
-*	When a POST request is made to this endpoint, the server will read from the group-channel.json file, add the new group details provided in the request body to the existing list, and then write the updated list back to the file.
-*	Responses indicating success or failure of the operation will be sent back to the client based on the outcome.
-
-How it works:
-*	The addGroup.js module is imported and used as a handler for the /addGroup route in the server.js file.
-*	Inside addGroup.js, the server first reads the group-channel.json file to fetch the current list of groups.
-*	The new group details, sent in the request body, are added to this list.
-*	The updated list is then written back to the group-channel.json file.
-*	The server sends an appropriate response based on whether the write operation was successful or if there was an error at any point in the process.
-
-
-## app.post('/addChannel', require('./routes/addChannel'));
-/addChannel - Add a new channel to an existing group
-*	HTTP Method: POST
-*	Endpoint: /addChannel
-*	Handler: addChannel.js
-
-Parameters:
-*	Request Body:
-    *	groupName: The name of the channel you want to add.
-    *	groupId: The unique identifier of the group to which the channel should be added.
-
-Return Values:
-*	On successful addition of the channel to the group:
-    *	success: true
-    *	message: "Channel added to group."
-*	On errors (e.g., missing parameters, group not found, server error during reading or writing to the file):
-    *	success: false
-    *	message: A corresponding error message like "groupName and groupId are required." or "Group not found." or "Server error."
-
-Purpose:
-*	The purpose of this route is to allow clients to add a new channel to an existing group.
-*	When a POST request is made to this endpoint, the server will read from the group-channel.json file, find the specified group using the provided groupId, and then add the new channel name to the list of channels for that group. The updated list of groups (with the new channel) will then be written back to the file.
-*	Responses indicating success or failure of the operation will be sent back to the client based on the outcome.
-
-How it works:
-*	The addChannel.js module is imported and used as a handler for the /addChannel route in the server.js file.
-*	Inside addChannel.js, the groupName and groupId values are extracted from the request body.
-*	The server then reads the group-channel.json file to fetch the current list of groups.
-*	The specified group is found in the list using the provided groupId.
-*	The new channel name is added to the list of channels for the found group.
-*	The updated list of groups is then written back to the group-channel.json file.
-*	The server sends an appropriate response based on whether the operation was successful or if there was an error at any step.
-
-
-## app.delete('/deleteChannelFromGroup/:channelId/:groupId', require('./routes/deleteChannelFromGroup'));
-/deleteChannelFromGroup/:channelId/:groupId - Remove a channel from an existing group
-*	HTTP Method: DELETE
-*	Endpoint: /deleteChannelFromGroup/:channelId/:groupId
-*	Handler: deleteChannelFromGroup.js
-
-Parameters:
-*	URL Parameters:
-    *	channelId: The identifier of the channel you want to remove.
-    *	groupId: The unique identifier of the group from which the channel should be removed.
-
-Return Values:
-*	On successful removal of the channel from the group:
-    *	success: true
-    *	message: "Channel removed from group."
-*	On errors (e.g., group not found, channel not found in the group, server error during reading or writing to the file):
-    *	success: false
-    *	message: A corresponding error message like "Group not found." or "Server error."
-
-Purpose:
-*	The purpose of this route is to allow clients to remove a channel from an existing group.
-*	When a DELETE request is made to this endpoint, the server will read from the group-channel.json file, find the specified group using the provided groupId, and then remove the specified channel from that group's list of channels. The updated list of groups (without the removed channel) will then be written back to the file.
-*	Responses indicating success or failure of the operation will be sent back to the client based on the outcome.
-
-How it works:
-*	The deleteChannelFromGroup.js module is imported and used as a handler for the /deleteChannelFromGroup/:channelId/:groupId route in the server.js file.
-*	Inside deleteChannelFromGroup.js, the channelId and groupId values are extracted from the request URL parameters.
-*	The server then reads the group-channel.json file to fetch the current list of groups.
-*	The specified group is found in the list using the provided groupId.
-*	If the group contains the specified channel, the channel is removed from the group's list of channels.
-*	The updated list of groups is then written back to the group-channel.json file.
-*	The server sends an appropriate response based on whether the operation was successful or if there was an error at any step.
-
-
-## app.delete('/deleteGroup/:groupId', require('./routes/deleteGroup'));
-/deleteGroup/:groupId - Remove an existing group
-*	HTTP Method: DELETE
-*	Endpoint: /deleteGroup/:groupId
-*	Handler: deleteGroup.js
-
-Parameters:
-*	URL Parameters:
-    o	groupId: The unique identifier of the group you want to delete.
-
-Return Values:
-*	On successful removal of the group:
-    o	success: true
-    o	message: "Group deleted successfully."
-*	On errors (e.g., group not found, server error during reading or writing to the file):
-    o	success: false
-    o	message: A corresponding error message like "Group not found." or "Error writing to file."
-
-Purpose:
-*	The purpose of this route is to allow clients to delete a group.
-*	When a DELETE request is made to this endpoint, the server will read from the group-channel.json file, find the specified group using the provided groupId, and then delete that group from the list. The updated list of groups (without the deleted group) will then be written back to the file.
-*	Responses indicating success or failure of the operation will be sent back to the client based on the outcome.
-
-How it works:
-*	The deleteGroup.js module is imported and used as a handler for the /deleteGroup/:groupId route in the server.js file.
-*	Inside deleteGroup.js, the groupId value is extracted from the request URL parameters and converted to a number.
-*	The server then reads the group-channel.json file to fetch the current list of groups.
-*	The specified group is found in the list using the provided groupId.
-*	If the group is found, it's removed from the list.
-*	The updated list of groups is then written back to the group-channel.json file.
-*	The server sends an appropriate response based on whether the operation was successful or if there was an error at any step.
-*	Just a note: While the logic is correct and should work as intended, always ensure to have backups when working with file operations or have a system to revert changes if something goes wrong, especially in production environments.
-
-
-## app.delete('/removeUser/:userId/:groupId', require('./routes/removeUser'));
-/removeUser/:userId/:groupId - Remove a user from a specific group
-*	HTTP Method: DELETE
-*	Endpoint: /removeUser/:userId/:groupId
-*	Handler: removeUser.js
-
-Parameters:
-*	URL Parameters:
-    *	userId: The unique identifier of the user you want to remove from a group.
-    *	groupId: The unique identifier of the group from which you want to remove the user.
-
-Return Values:
-*	On successful removal of the user from the group:
-    *	message: "User removed from group successfully."
-*	On errors (e.g., user not found, server error during reading or writing to the file):
-    *	message: A corresponding error message like "User not found." or "Error writing to the file."
-
-Purpose:
-*	The purpose of this route is to remove a user from a specific group.
-*	When a DELETE request is made to this endpoint, the server will read from the users.json file, find the specified user using the provided userId, and then remove the groupId from the user's groupids array. The updated user information will then be written back to the file.
-*	A response indicating the success or failure of the operation will be sent back to the client based on the outcome.
-
-How it works:
-*	The removeUser.js module is imported and used as a handler for the /removeUser/:userId/:groupId route in the server.js file.
-*	Inside removeUser.js, the userId and groupId values are extracted from the request URL parameters and converted to numbers.
-*	The server then reads the users.json file to fetch the current list of users.
-*	The specified user is found in the list using the provided userId.
-*	If the user is found, the server will then search for the groupId in the user's groupids array and remove it.
-*	The updated user information is then written back to the users.json file.
-*	The server sends an appropriate response based on whether the operation was successful or if there was an error at any step.
+
+## /addChannel
+* Route: POST /addChannel
+* Parameters: Expects a JSON object in the request body with groupName and groupId properties.
+* Return Values: JSON response with success and message properties.
+    * If successful, it returns { success: true, message: 'Channel added to group.' }.
+    * If there's an error, it returns { success: false, message: 'Error message' }.
+* Functionality: This route adds a channel to a specified group. It handles the following:
+    * Validates and extracts groupName and groupId.
+    * Searches for the group in the database.
+    * Adds groupName to the group's channels.
+    * Updates the group in the database.
+    * Provides appropriate response messages for success and error cases.
+
+## /addGroup
+* Route: POST /addGroup
+* Parameters: Expects a JSON object in the request body containing group information.
+* Return Values: JSON response with success and message properties.
+    * If successful, it returns { success: true, message: 'Group added successfully.' }.
+    * If there's an error, it returns { success: false, message: 'Error message' }.
+* Functionality: This route is responsible for creating and adding a new group to the database collection. It handles the following:
+    * Connects to the MongoDB database.
+    * Validates the request body; if empty, it returns a 400 Bad Request response.
+    * Inserts the provided group data into the specified collection.
+    * Checks for the success of the insert operation. If successful, it returns a success response.
+    * If the insert operation fails, it returns an error response.
+    * Ensures the MongoDB client connection is closed regardless of success or failure.
+
+## /addUserToChannel
+* Route: POST /addUserToChannel
+* Parameters: Expects a JSON object in the request body with username, groupname, and channelname properties.
+* Return Values: JSON response with success and message properties.
+    * If successful, it returns { success: true, message: 'User added to the channel within the group.' }.
+    * If there's an error, it returns { success: false, message: 'Error message' }.
+* Functionality: This route handles the following actions:
+    * Validates and extracts username, groupname, and channelname from the request body.
+    * Connects to the MongoDB database.
+    * Searches for the user and group in their respective collections.
+    * Checks if the user, group, and channel exist; if not, it returns relevant error responses.
+    * Adds the user to the list of group members for the channel.
+    * Updates the group information in the database.
+    * Adds the channel name to the user's list of channel names.
+    * Updates the user's information in the database.
+    * Responds with a success message after successful user addition.
+    * In case of errors, it provides a server error response.
+    * Ensures the MongoDB client connection is closed in the finally block.
+
+## /addUserToGroup
+* Route: POST /addUserToGroup
+* Parameters: Expects a JSON object in the request body with username and groupname properties.
+* Return Values: JSON response with success and message properties.
+    * If successful, it returns { success: true, message: 'User added to group.' }.
+    * If there's an error, it returns { success: false, message: 'Error message' }.
+* Functionality: This route handles the following actions:
+    * Validates and extracts username and groupname from the request body.
+    * Connects to the MongoDB database.
+    * Searches for the user and group in their respective collections.
+    * Checks if the user and group exist; if not, it returns relevant error responses.
+    * Adds the user to the list of group members.
+    * Updates the group information in the database.
+    * Adds the group name to the user's list of group names.
+    * Updates the user's information in the database.
+    * Responds with a success message after successful user addition.
+    * In case of errors, it provides a server error response.
+    * Ensures the MongoDB client connection is closed in the finally block.
+
+## /createGroup
+* Route: POST /createGroup
+* Parameters: Expects a JSON object in the request body containing group information.
+* Return Values: JSON response with success and message properties.
+    * If successful, it returns { success: true, message: 'Group created successfully.' }.
+    * If there's an error, it returns { success: false, message: 'Error message' }.
+* Functionality: This route handles the following actions:
+    * Connects to the MongoDB database.
+    * Retrieves the new group data from the request body.
+    * Retrieves the collection of groups from the database.
+    * Determines the new group's ID by counting the existing documents and incrementing the count.
+    * Inserts the new group into the collection.
+    * Checks for the success of the insert operation. If successful, it returns a success response.
+    * If the insert operation fails, it returns an error response.
+    * Ensures the MongoDB client connection is closed in the finally block.
+
+## /deleteChannelFromGroup/:channelId/:groupId
+* Route: DELETE /deleteChannelFromGroup/:channelId/:groupId
+* Parameters:
+    * channelId: Extracted from the URL parameters.
+    * groupId: Extracted from the URL parameters.
+* Return Values: JSON response with success and message properties.
+    * If successful, it returns { success: true, message: 'Channel removed from group.' }.
+    * If there's an error, it returns { success: false, message: 'Error message' }.
+* Functionality: This route handles the following actions:
+    * Connects to the MongoDB database.
+    * Retrieves channelId and groupId from the URL parameters.
+    * Retrieves the collection of groups from the database.
+    * Searches for the group with the specified groupId.
+    * If the group is not found, it returns a 400 Bad Request response.
+    * Filters the channels in the group to remove the specified channelId.
+    * Updates the group in the database to reflect the removal of the channel.
+    * Responds with a success message after the channel removal.
+    * In case of errors, it provides a server error response.
+    * Ensures the MongoDB client connection is closed in the finally block.
+
+## /api/deleteGroup/:groupName
+* Route: DELETE /api/deleteGroup/:groupName
+* Parameters:
+    * groupName: Extracted from the URL parameters.
+* Return Values: JSON response with message property.
+    * If the group is successfully deleted, it returns a 200 OK response with a message like: { message: 'Group deleted successfully.' }.
+    * If the group is not found, it returns a 404 Not Found response with a message like: { message: 'Group not found.' }.
+    * If there's a server error, it returns a 500 Internal Server Error response with a message like: { message: 'An error occurred while deleting the group.' }.
+* Functionality: This route handles the following actions:
+    * Connects to the MongoDB database.
+    * Retrieves the groupName from the URL parameters.
+    * Attempts to find and delete a group with the specified groupName in the 'group-channel' collection.
+    * Checks the deletedCount property of the result to determine if the group was deleted successfully.
+    * Returns a relevant response based on the success or failure of the deletion.
+    * In case of errors, it provides a server error response.
+    * Ensures the MongoDB client connection is closed in the finally block.
+
+## /deleteUser
+* Route: DELETE /deleteUser/:email
+* Parameters:
+    * email: Extracted from the URL parameters.
+* Return Values: JSON response with a message property.
+    * If the user is successfully deleted, it returns a 200 OK response with a message like: { message: 'User deleted successfully.' }.
+    * If the user is not found, it returns a 404 Not Found response with a message like: { message: 'User not found.' }.
+    * If there's a server error, it returns a 500 Internal Server Error response with a message like: { message: 'Error deleting user.' }.
+* Functionality: This route handles the following actions:
+    * Validates the presence of the email in the URL parameters. If it's missing, it returns a 400 Bad Request response.
+    * Connects to the MongoDB database.
+    * Attempts to find and delete a user with the specified email in the 'users' collection.
+    * Checks the deletedCount property of the result to determine if the user was deleted successfully.
+    * Returns a relevant response based on the success or failure of the deletion.
+    * In case of errors, it provides a server error response.
+    * Ensures the MongoDB client connection is closed in the finally block.
+
+## /getGroups
+* Route: GET /getGroups
+* Parameters: No request body or URL parameters.
+* Return Values: JSON response containing an array of group data or an error message.
+    * If successful, it returns an array of group data in a JSON response.
+    * If there's a server error, it returns a 500 Internal Server Error response with a message like: { message: 'Server error.' }.
+* Functionality: This route handles the following actions:
+    * Connects to the MongoDB database.
+    * Retrieves the 'group-channel' collection from the database.
+    * Retrieves all groups from the 'group-channel' collection.
+    * Converts the groups to an array.
+    * Sends the array of group data as a JSON response.
+    * In case of errors, it provides a server error response.
+    * Ensures the MongoDB client connection is closed in the finally block.
+
+## /getUsers
+* Route: GET /getUsers
+* Parameters: No request body or URL parameters.
+* Return Values: JSON response containing an array of user data or an error message.
+    * If successful, it returns an array of user data in a JSON response.
+    * If there's a server error, it returns a 500 Internal Server Error response with a message like: { message: 'Error retrieving users.' }.
+* Functionality: This route handles the following actions:
+    * Connects to the MongoDB database.
+    * Retrieves the 'users' collection from the database.
+    * Retrieves all users from the 'users' collection.
+    * Converts the users to an array.
+    * Sends the array of user data as a JSON response.
+    * In case of errors, it provides a server error response.
+    * Ensures the MongoDB client connection is closed in the finally block.
+
+## /postLogin
+* Route: POST /login
+* Parameters: Expects a JSON object in the request body with email and pwd properties.
+* Return Values: JSON response with valid property and user information, or a response indicating login failure.
+    * If login is successful, it returns a JSON response like:
+        * {
+        * "valid": true,
+        * "user": {
+            * "userid": "user.userid",
+            * "username": "user.username",
+            * "role": "user.role",
+            * "groupnames": ["group1", "group2"],
+            * "email": "user.email",
+            * "channelnames": ["channel1", "channel2"]
+        * }
+        * }
+
+    * If login fails, it returns { valid: false }.
+* Functionality: This route handles the following actions:
+    * Connects to the MongoDB database.
+    * Checks if the request body is empty. If it is, it returns a 400 Bad Request response.
+    * Retrieves the email and pwd from the request body.
+    * Searches for a user in the 'users' collection with the provided email and pwd.
+    * If a user is found, it sends a JSON response with the user's information and valid: true.
+    * If no user is found, it sends a response with valid: false.
+    * Closes the MongoDB client connection.
+
+
+## /postRegister
+* Route: POST /register
+* Parameters: Expects a JSON object in the request body with user information, including email and username. Optionally, it can include an action to list users.
+* Return Values: JSON responses with valid property and, in some cases, additional information.
+    * If successful registration, it returns { valid: true }.
+    * If the email is already in use, it returns { valid: false, message: 'Email already in use.' }.
+    * If the username already exists, it returns { valid: false, message: 'Username already exists. Choose another.' }.
+    * If the action is 'listUser' (super-admin page), it returns a list of users as { users: [user1, user2, ...] }.
+    * If there's a server error, it returns { valid: false, message: 'Error in registration.' }.
+* Functionality: This route handles the following actions:
+    * Connects to the MongoDB database.
+    * Checks if the request body is empty. If it is, it returns a 400 Bad Request response.
+    * Retrieves the new user data from the request body, including the action.
+    * If the action is 'listUser', it retrieves and returns a list of all users in the 'users' collection.
+    * Checks if the email already exists in the 'users' collection; if it does, it returns a response indicating that the email is in use.
+    * Checks if the username already exists in the 'users' collection; if it does, it returns a response indicating that the username already exists.
+    * If the registration is successful, it assigns a new userid and inserts the new user into the 'users' collection.
+    * Provides appropriate success or error responses.
+    * Closes the MongoDB client connection.
+
+## /removeUser
+* Route: POST /removeUserFromGroup
+* Parameters: Expects a JSON object in the request body with groupname and username properties.
+* Return Values: JSON response with success and message properties.
+    * If successful, it returns { success: true, message: 'User removed from group.' }.
+    * If the groupname or username is missing, it returns a 400 Bad Request response with a message indicating the missing parameters.
+    * If the group or user is not found, it returns a 400 Bad Request response with a message indicating that the group or user is not found.
+    * If there's a server error, it returns a 500 Internal Server Error response with a message like: { success: false, message: 'Server error.' }.
+* Functionality: This route handles the following actions:
+    * Validates the presence of groupname and username in the request body. If either is missing, it returns a 400 Bad Request response.
+    * Connects to the MongoDB database.
+    * Searches for the group with the specified groupname.
+    * If the group is not found, it returns a 400 Bad Request response.
+    * Searches for the user with the specified username.
+    * If the user is not found, it returns a 400 Bad Request response.
+    * Removes the groupname from the user's groupnames array (if it exists) and updates the user in the database.
+    * Removes the userid from the group's members array (if it exists) and updates the group in the database.
+    * Responds with a success message after removing the user from the group.
+    * In case of errors, it provides a server error response.
+    * Ensures the MongoDB client connection is closed in the finally block.
+
+## /updateUserRole
+* Route: PUT /updateUserRole
+* Parameters: Expects a JSON object in the request body with userId and newRole properties.
+* Return Values: JSON response with a message property.
+    * If the user's role is successfully updated, it returns a message like: { message: "User role updated successfully." }.
+    * If the user is not found, it returns a 404 Not Found response with a message like: { message: "User not found." }.
+    * If there's a server error, it returns a 500 Internal Server Error response with a message like: { message: "Error updating user role." }.
+* Functionality: This route handles the following actions:
+    * Validates the presence of userId and newRole in the request body.
+    * Connects to the MongoDB database.
+    * Searches for the user with the specified userId.
+    * If the user is found, it updates the user's role with the new role.
+    * Responds with a success message after updating the user's role.
+    * If the user is not found, it returns a 404 response indicating that the user is not found.
+    * In case of errors, it provides a server error response.
+    * Ensures the MongoDB client connection is closed in the finally block.
 
 # Angular Architecture
 
@@ -573,15 +405,3 @@ ChatService (chat.service.ts):
     *	messages: An array of strings that keeps a list of messages sent.
 *	Methods:
     *	sendMessage(): Sends the user's message using the ChatService. It also adds the message to the local messages list and resets the input field.
-
-
-## Models:
-User Model (Register):
-*	Properties:
-    *	username: A string representing the user's name.
-    *	email: A string representing the user's email.
-    *	password: A string representing the user's password.
-
-Message Model (Chat):
-*	Properties:
-    *	content: A string representing the content of the message.

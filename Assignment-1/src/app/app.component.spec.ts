@@ -1,29 +1,54 @@
-import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { Router } from '@angular/router';
 
 describe('AppComponent', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [RouterTestingModule],
-    declarations: [AppComponent]
-  }));
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
+  let router: Router;
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [AppComponent],
+      providers: [Router],
+    });
+
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
+    router = TestBed.inject(Router);
   });
 
-  it(`should have as title 'Assignment-1'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('Assignment-1');
+  it('should create the component', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('Assignment-1 app is running!');
+  it('should navigate to dashboard on successful login', () => {
+    spyOn(router, 'navigate');
+    component.email = 'lvmytran@gmail.com';
+    component.password = '123';
+
+    component.login();
+
+    expect(router.navigate).toHaveBeenCalledWith(['/dashboard']);
+    expect(component.errorMessage).toBe('');
+  });
+
+  it('should show an error message on invalid login', () => {
+    component.email = 'nonexistent@gmail.com';
+    component.password = 'invalidpassword';
+
+    component.login();
+
+    expect(component.errorMessage).toBe('Invalid email or password.');
+  });
+
+  it('should clear session storage and navigate to login on logout', () => {
+    spyOn(router, 'navigate');
+    spyOn(sessionStorage, 'clear');
+    
+    component.logout();
+
+    expect(router.navigate).toHaveBeenCalledWith(['/login']);
+    expect(sessionStorage.clear).toHaveBeenCalled();
   });
 });

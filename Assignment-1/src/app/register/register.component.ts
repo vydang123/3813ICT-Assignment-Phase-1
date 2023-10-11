@@ -12,6 +12,7 @@ export class RegisterComponent implements OnInit {
     email: '',
     password: ''
   };
+  users: any[] = []; // Define the users array
 
   constructor(private userService: UserService) { }
 

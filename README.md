@@ -161,7 +161,7 @@ Attributes of a Group-Channel Object:
     * In case of errors, it provides a server error response.
     * Ensures the MongoDB client connection is closed in the finally block.
 
-## /deleteUser
+## /deleteUser/:email
 * Route: DELETE /deleteUser/:email
 * Parameters:
     * email: Extracted from the URL parameters.

@@ -1,11 +1,12 @@
 module.exports = (db, app, client) => {
   app.post('/createGroup', async (req, res) => {
     try {
+      // Connect to MongoDB
       await client.connect();
 
       const newGroup = req.body;
 
-      const db = client.db('assignment'); // Replace with your actual database name
+      
       const groupCollection = db.collection('group-channel'); // Replace 'group-channel' with your actual collection name
 
       // Find the count of documents in the collection to determine the new group's ID

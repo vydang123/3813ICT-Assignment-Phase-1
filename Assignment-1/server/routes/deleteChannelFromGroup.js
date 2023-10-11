@@ -6,9 +6,10 @@ module.exports = (db, app, client) => {
       const channelId = req.params.channelId;
       const groupId = Number(req.params.groupId);
 
-      const db = client.db('assignment'); // Replace with your actual database name
+      
       const groupCollection = db.collection('group-channel'); // Replace 'group-channel' with your actual collection name
 
+      //find a group
       const group = await groupCollection.findOne({ groupid: groupId });
 
       if (!group) {
@@ -17,6 +18,7 @@ module.exports = (db, app, client) => {
 
       const updatedChannels = group.channels.filter(channel => channel !== channelId);
 
+      //find a channel and delete channel
       await groupCollection.updateOne({ groupid: groupId }, { $set: { channels: updatedChannels } });
 
       res.send({ success: true, message: 'Channel removed from group.' });

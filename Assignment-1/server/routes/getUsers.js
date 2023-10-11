@@ -3,6 +3,7 @@ module.exports = function (db, app, client) {
     
 
     try {
+      // Connect to the MongoDB client
       await client.connect();
       // Assuming you have a 'users' collection in your MongoDB
       const userCollection = db.collection('users');
@@ -10,7 +11,7 @@ module.exports = function (db, app, client) {
       // Retrieve all users from the 'users' collection
       const users = await userCollection.find().toArray();
 
-      
+      //send all data to reponse page
         res.send(users);
       
       

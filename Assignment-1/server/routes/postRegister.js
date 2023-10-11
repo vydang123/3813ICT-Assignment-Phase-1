@@ -1,5 +1,6 @@
 module.exports = function (db, app, client) {
   app.post('/register', async function (req, res) {
+    // Connect to the MongoDB client
     await client.connect();
 
     if (!req.body) {
@@ -11,7 +12,8 @@ module.exports = function (db, app, client) {
 
     try {
       const userCollection = db.collection('users'); // Replace 'users' with your actual collection name
-
+      
+      //activate action 'listUser' in super-admin page
       if (action === 'listUser') {
         const users = await userCollection.find().toArray();
         console.log(users);

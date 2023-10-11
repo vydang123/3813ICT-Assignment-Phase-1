@@ -7,6 +7,8 @@ module.exports = async (db, app, client) => {
       await client.connect();
 
       const groupName = req.params.groupName;
+
+      // Find and delete a group by groupname
       const result = await db.collection('group-channel').deleteOne({ groupname: groupName });
 
       if (result.deletedCount === 1) {

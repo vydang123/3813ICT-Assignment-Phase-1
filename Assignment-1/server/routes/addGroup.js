@@ -1,6 +1,7 @@
 module.exports = (db, app, client) => {
   app.post('/addGroup', async (req, res) => {
     try {
+      // Connect to MongoDB
       await client.connect();
 
       if (!req.body) {
@@ -9,6 +10,7 @@ module.exports = (db, app, client) => {
 
       const groupCollection = db.collection('group-channel'); // Replace 'group-channel' with your actual collection name
 
+      //insert a new group to the collection
       const insertedGroup = await groupCollection.insertOne(req.body);
 
       if (!insertedGroup.insertedId) {

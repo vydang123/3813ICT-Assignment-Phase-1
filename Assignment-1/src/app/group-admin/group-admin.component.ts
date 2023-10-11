@@ -52,6 +52,7 @@ export class GroupAdminComponent implements OnInit {
         }
   }
 
+  //get all users
   fetchAllUsers(): void {
     this.httpClient.get<any[]>(BACKEND_URL + 'getUsers', httpOptions).subscribe(
       (users) => {
@@ -64,6 +65,7 @@ export class GroupAdminComponent implements OnInit {
     );
   }
 
+  //get all groups
   fetchAllGroups(): void {
     this.httpClient.get<any[]>(BACKEND_URL + 'getGroups', httpOptions).subscribe(
       (groups) => {
@@ -77,7 +79,7 @@ export class GroupAdminComponent implements OnInit {
   }
 
 
-
+//add group function
   addGroup(): void {
     if (this.newGroup.groupname) {
       this.newGroup.groupid = this.groups.length + 1;
@@ -129,7 +131,7 @@ export class GroupAdminComponent implements OnInit {
   }
 
 
-// Method to add channel to a group
+
 // Method to add channel to a group
 addChannelToGroup(): void {
   console.log('aaa')
@@ -164,6 +166,7 @@ filterUsersByGroup(): void {
   }
 }
 
+//function to remove user
 removeUserFromGroup(): void {
   if (this.selectedGroup && this.selectedUser) {
     const requestBody = {
@@ -186,6 +189,7 @@ removeUserFromGroup(): void {
   }
 }
 
+//delete channel from group
 deleteChannelFromGroup(channel: string, group: any): void {
   const payload = {
       channelId: channel,
@@ -262,6 +266,7 @@ addUserToChannel(username: any, groupname: any, channelname: any): void {
   }
 }
 
+//delete group
 async deleteGroup(selectedGroup: any): Promise<void> {
   if (!selectedGroup || !selectedGroup.groupname) {
     alert("Please select a group to delete.");

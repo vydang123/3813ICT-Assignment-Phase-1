@@ -1,12 +1,18 @@
 module.exports = function(db, app, client ) {
   app.post('/login', async function(req, res) {
+    // Connect to the MongoDB client
       await client.connect();
+
       if (!req.body) {
           return res.sendStatus(400);
         }
+    
+
       const u = req.body.email;
       const p = req.body.pwd;
       console.log(u,p);
+
+      // Retrieve the user from the 'users' collection
       let user = await db.collection('users').findOne({ email: u, password: p })
       console.log(user);
           if (user) {

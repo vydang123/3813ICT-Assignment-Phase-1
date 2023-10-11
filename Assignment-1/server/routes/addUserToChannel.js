@@ -9,11 +9,13 @@ module.exports = async (db, app, client) => {
         return res.status(400).send({ success: false, message: 'Username, groupname, and channelname are required.' });
       }
   
+      // Connect to MongoDB
       await client.connect();
   
       const groupCollection = db.collection('group-channel');
       const userCollection = db.collection('users');
-  
+
+      //find users and groups
       try {
         const user = await userCollection.findOne({ username: username });
         if (!user) {

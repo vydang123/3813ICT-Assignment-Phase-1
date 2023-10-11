@@ -42,7 +42,6 @@ app.use(express.static(path.join(__dirname, '/../dist/week4tut')));
   require('./routes/postRegister.js')(db, app, client);
   require('./routes/removeUser.js')(db, app, client);
   require('./routes/updateUserRole.js')(db, app, client);
-  require('./routes/getGroupsChannels.js')(db, app, client);
  
 
 // Start the server listening on the specified port
